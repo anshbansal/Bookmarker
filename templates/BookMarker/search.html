@@ -29,7 +29,7 @@
                 <a>Categories</a>
             </div>
             {% for category in categories %}
-                <li>{{ category }}</li>
+                <li style="color: red" onclick="my_custom()">{{ category }}</li>
             {% endfor %}
         </ul>
     </div>
@@ -38,26 +38,31 @@
     <div id="page-content-wrapper">
         <div class="content-header">
             <h1>
-                Simple Sidebar
+                BookMarks
             </h1>
         </div>
         <!-- Keep all page content within the page-content inset div! -->
         <div class="page-content inset">
+            {% for bookmark in bookmarks %}
             <div class="row">
-                <div class="col-md-6">
-                    <p class="well">The template still uses the default Bootstrap rows and columns.</p>
+                <div class="col-md-12">
+                      <a href="{{ bookmark.url_content }}" target="_blank">{{ bookmark }}</a>
                 </div>
-
             </div>
+            {% endfor %}
         </div>
     </div>
-
 </div>
 
 <!-- JavaScript -->
 <script src="{% static 'BookMarker/js/jquery-2.1.1.js' %}" type="text/javascript"></script>
-<script src="{% static 'BookMarker/js/bootstrap.js' %}"  type="text/javascript"></script>
+<script src="{% static 'BookMarker/js/bootstrap.js' %}" type="text/javascript"></script>
 
+<script>
+    function my_custom() {
+        alert("Help");
+    }
+</script>
 </body>
 
 </html>

@@ -12,4 +12,5 @@ class DetailView(generic.DetailView):
 def get_category(request):
     return render(request, 'BookMarker/search.html', {
         'categories': Category.objects.all(),
+        'bookmarks': BookMark.objects.all(),
     })
