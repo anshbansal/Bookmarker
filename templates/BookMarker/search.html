@@ -25,12 +25,12 @@
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
-            <br>
-            <input type="text" class="form-control" style="width: 95%; margin: 0 auto" placeholder="Category" autofocus
+            <br><br>
+            <input type="text" class="form-control" style="width: 80%; margin: 0 auto" placeholder="Category" autofocus
                    id="category_inp">
 
             {% for category in categories %}
-                <li style="color: red" onclick="my_custom()">{{ category }}</li>
+                <li style="color: red">{{ category }}</li>
             {% endfor %}
         </ul>
     </div>
@@ -56,6 +56,7 @@
 </div>
 
 <!-- JavaScript -->
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
 <script src="{% static 'BookMarker/js/jquery-2.1.1.js' %}" type="text/javascript"></script>
 <script src="{% static 'BookMarker/js/bootstrap.js' %}" type="text/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
