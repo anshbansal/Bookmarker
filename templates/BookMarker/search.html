@@ -10,13 +10,6 @@
     <meta name="author" content="Aseem">
 
     <title>Search Page</title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bootstrap.css' %}">
-
-    <!-- Add custom CSS here -->
-    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/simple-sidebar.css' %}">
-
 </head>
 
 <body>
@@ -29,11 +22,8 @@
             <input type="text" class="form-control" style="width: 80%; margin: 0 auto" placeholder="Category" autofocus
                    id="category_inp">
 
-            <!--
-            {% for category in categories %}
-                <li style="color: red">{{ category }}</li>
-            {% endfor %}
-        -->
+            <div id="category_list">
+            </div>
         </div>
     </div>
 
@@ -57,14 +47,24 @@
     </div>
 </div>
 
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bootstrap.css' %}">
+
+<!-- Add custom CSS here -->
+<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/simple-sidebar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bookmarker.css' %}">
+
+
 <!-- JavaScript -->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all"/>
-<script type="text/javascript" src="{% static 'BookMarker/js/jquery-2.1.1.js' %}" ></script>
+<script type="text/javascript" src="{% static 'BookMarker/js/jquery-2.1.1.js' %}"></script>
 <script type="text/javascript" src="{% static 'BookMarker/js/bootstrap.js' %}"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 
 <!-- Custom JavaScript -->
 <script src="{% static 'BookMarker/js/search.js' %}"></script>
 </body>
+
+<img src="{% static 'BookMarker/img/delete.png' %}"/>Aseem
 
 </html>
