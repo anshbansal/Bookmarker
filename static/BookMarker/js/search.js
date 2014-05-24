@@ -22,7 +22,24 @@ category_input.keyup(function (e) {
 });
 
 category_input.bind("enterKey", function (e) {
+
+    var is_category = false;
+
+    $(".ui-menu-item").each(function (index) {
+            if (category_input.val() == $.trim($(this).text())) {
+                is_category = true;
+                return false;
+            }
+        }
+    )
+    
+    if (is_category == false) {
+        alert("Not a category");
+        return false;
+    }
+
     var already_present = false;
+
     $(".category").each(function (index) {
             if (category_input.val() == $.trim($(this).text())) {
                 alert("Category already added");
@@ -31,15 +48,17 @@ category_input.bind("enterKey", function (e) {
             }
         }
     )
+
     if (already_present == false) {
         $("#category_list").append(
-            '<span class="category ' + category_input.val() + '">' +
-                category_input.val() +
+            '<li class="category ' + category_input.val() + '">' +
                 ' <img src="' + static_img_url + '/delete.png" class="delete-cat ' + category_input.val() + '" ' +
                 ' title="Remove category ' + category_input.val() + '"/>' +
-                '</span>'
+                category_input.val() +
+                '</li>'
         );
     }
+    category_input.val("");
 });
 
 $(document).on('click', ".delete-cat", function (e) {
