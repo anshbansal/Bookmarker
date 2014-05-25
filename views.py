@@ -9,14 +9,8 @@ import json
 import webbrowser
 
 
-class DetailView(generic.DetailView):
-    model = BookMark
-    template_name = 'BookMarker/detail.html'
-
-
 def get_category(request):
     return render(request, 'BookMarker/search.html', {
-        'categories': Category.objects.all(),
         'bookmarks': BookMark.objects.all(),
     })
 
