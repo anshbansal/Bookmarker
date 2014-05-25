@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 
 <html lang="en">
-{% load staticfiles %}
-<head>
 
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -13,14 +12,14 @@
 </head>
 
 <body>
+{% load staticfiles %}
 <div id="wrapper">
 
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
         <div class="sidebar-nav">
             <br><br>
-            <input type="text" class="form-control" style="width: 80%; margin: 0 auto" placeholder="Category" autofocus
-                   id="category_inp">
+            <input type="text" class="form-control" id="category_inp" placeholder="Category" autofocus>
 
             <div id="category_list">
             </div>
@@ -53,11 +52,11 @@
 <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bookmarker.css' %}">
 
 
-<!-- JavaScript -->
-<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" media="all"/>
+<!-- CDNs -->
+<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/jquery-ui-1.10.4.css' %}" media="all"/>
 <script type="text/javascript" src="{% static 'BookMarker/js/jquery-2.1.1.js' %}"></script>
 <script type="text/javascript" src="{% static 'BookMarker/js/bootstrap.js' %}"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{% static 'BookMarker/js/jquery-ui.min-1.8.16.js' %}"></script>
 
 <!-- Custom JavaScript -->
 <script src="{% static 'BookMarker/js/search.js' %}"></script>

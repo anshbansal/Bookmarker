@@ -48,12 +48,12 @@ category_input.bind("enterKey", function (e) {
         }
     )
     if (already_present == false) {
+        var val = category_input.val();
         $("#category_list").append(
-            '<li class="category ' + category_input.val() + '">' +
-                ' <img src="' + static_img_url + '/delete.png" class="delete-cat ' + category_input.val() + '" ' +
-                ' title="Remove category ' + category_input.val() + '"/>' +
-                category_input.val() +
-                '</li>'
+            '<div class="img-rounded category ' + val + '">' +
+                '<img src="' + static_img_url + '/delete.png" class="delete-cat ' + val + '"  title="Remove category '
+                + val + '"/> ' + val +
+                ' </div>'
         );
     }
     category_input.val("");

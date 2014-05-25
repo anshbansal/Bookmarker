@@ -1,7 +1,14 @@
-. delete-cat {
-
+.category {
+    color: lightslategray;
+    display: inline-block;
+    background-color: #ffffff;
+    margin: 5px;
+    padding-right: 7px;
+    padding-left: 3px;
 }
 
-.category {
-    color: red
+#category_inp {
+    text-align: right;
+    width: 80%;
+    margin: 0 auto;
 }
