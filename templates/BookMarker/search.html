@@ -37,10 +37,8 @@
         <!-- Keep all page content within the page-content inset div! -->
         <div class="page-content inset">
             {% for bookmark in bookmarks %}
-                <div class="row">
-                    <div class="col-md-12">
-                        <a href="{{ bookmark.url_content }}" target="_blank">{{ bookmark }}</a>
-                    </div>
+                <div class="col-md-12">
+                    <div class="bookmark-class {{ bookmark.id }}">{{ bookmark }}</div>
                 </div>
             {% endfor %}
         </div>

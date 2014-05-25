@@ -14,17 +14,18 @@ $(function () {
     });
 });
 
-//Add Bindings for keys
+
 category_input.keyup(function (e) {
+    //Add Bindings for keys to Search Box
     if (e.keyCode == 13) {
         $(this).trigger("enterKey");
     }
 });
 
+
 category_input.bind("enterKey", function (e) {
-
+    //For Search Box Enter Key
     var is_category = false;
-
     $(".ui-menu-item").each(function (index) {
             if (category_input.val() == $.trim($(this).text())) {
                 is_category = true;
@@ -32,14 +33,12 @@ category_input.bind("enterKey", function (e) {
             }
         }
     )
-    
     if (is_category == false) {
         alert("Not a category");
         return false;
     }
 
     var already_present = false;
-
     $(".category").each(function (index) {
             if (category_input.val() == $.trim($(this).text())) {
                 alert("Category already added");
@@ -48,7 +47,6 @@ category_input.bind("enterKey", function (e) {
             }
         }
     )
-
     if (already_present == false) {
         $("#category_list").append(
             '<li class="category ' + category_input.val() + '">' +
@@ -61,6 +59,7 @@ category_input.bind("enterKey", function (e) {
     category_input.val("");
 });
 
+
 $(document).on('click', ".delete-cat", function (e) {
     var classList = $(this).attr('class').split(/\s+/);
     $.each(classList, function (index, item) {
@@ -69,3 +68,17 @@ $(document).on('click', ".delete-cat", function (e) {
         }
     });
 })
+
+
+$(document).on('click', ".bookmark-class", function () {
+    //For opening the bookmarks via the server
+    var classList = $(this).attr('class').split(/\s+/);
+    $.each(classList, function (index, item) {
+        if (item != 'bookmark-class') {
+            $.ajax({
+                url: "open/",
+                data: {'id': item}
+            });
+        }
+    });
+});

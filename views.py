@@ -6,6 +6,7 @@ from BookMarker.models import BookMark, Category
 
 
 import json
+import webbrowser
 
 
 class DetailView(generic.DetailView):
@@ -29,3 +30,9 @@ def category_autocomplete(request):
         results.append(category_json)
     data = json.dumps(results)
     return HttpResponse(data, 'application/json')
+
+
+def website_open(request):
+    q = request.GET.get('id', '')
+    webbrowser.open(BookMark.objects.get(pk=int(q)).url_content)
+    return HttpResponse('', 'text/html')
