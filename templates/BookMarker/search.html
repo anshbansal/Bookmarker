@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
+{% load staticfiles %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +9,17 @@
     <meta name="author" content="Aseem">
 
     <title>Search Page</title>
+
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/jquery-ui-1.10.4.css' %}" media="all"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/simple-sidebar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bookmarker.css' %}">
 </head>
 
 <body>
-{% load staticfiles %}
 <div id="wrapper">
 
     <!-- Sidebar -->
@@ -44,19 +51,10 @@
     </div>
 </div>
 
-<!-- Bootstrap core CSS -->
-<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bootstrap.css' %}">
-
-<!-- Add custom CSS here -->
-<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/simple-sidebar.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bookmarker.css' %}">
-
-
-<!-- CDNs -->
-<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/jquery-ui-1.10.4.css' %}" media="all"/>
-<script type="text/javascript" src="{% static 'BookMarker/js/jquery-2.1.1.js' %}"></script>
-<script type="text/javascript" src="{% static 'BookMarker/js/bootstrap.js' %}"></script>
-<script type="text/javascript" src="{% static 'BookMarker/js/jquery-ui.min-1.8.16.js' %}"></script>
+<!-- JavaScript libraries -->
+<script src="{% static 'BookMarker/js/jquery-2.1.1.js' %}"></script>
+<script src="{% static 'BookMarker/js/bootstrap.js' %}"></script>
+<script src="{% static 'BookMarker/js/jquery-ui.min-1.8.16.js' %}"></script>
 
 <!-- Custom JavaScript -->
 <script src="{% static 'BookMarker/js/search.js' %}"></script>
