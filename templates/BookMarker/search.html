@@ -41,12 +41,7 @@
             </h1>
         </div>
         <!-- Keep all page content within the page-content inset div! -->
-        <div class="page-content inset">
-            {% for bookmark in bookmarks %}
-                <div class="col-md-12">
-                    <div class="bookmark-class {{ bookmark.id }}">{{ bookmark }}</div>
-                </div>
-            {% endfor %}
+        <div class="page-content inset" id="bookmarks">
         </div>
     </div>
 </div>

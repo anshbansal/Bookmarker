@@ -10,9 +10,7 @@ import webbrowser
 
 
 def get_category(request):
-    return render(request, 'BookMarker/search.html', {
-        'bookmarks': BookMark.objects.all(),
-    })
+    return render(request, 'BookMarker/search.html')
 
 
 def category_autocomplete(request):
@@ -30,3 +28,5 @@ def website_open(request):
     q = request.GET.get('id', '')
     webbrowser.open(BookMark.objects.get(pk=int(q)).url_content)
     return HttpResponse('', 'text/html')
+
+#<div class="col-md-12 bookmark-class {{ bookmark.id }}">{{ bookmark }}</div>

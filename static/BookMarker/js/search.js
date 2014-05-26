@@ -11,11 +11,13 @@ var category = ".category";
 
 //Variables for selectors
 var category_input = $("#category_inp");
+var bookmarks_list = $("#bookmarks");
 
 //Variables for event names
 var EV_ENTER_KEY = "enterKey";
 var EV_ADD_CATEGORY = "addCategory";
 var EV_CLICK = "click";
+var EV_UPDATE_BOOKMARKS = "updateBooks";
 
 
 //Auxiliary functions
@@ -23,10 +25,18 @@ function value_in_selector(value_of, selector) {
     var result = false;
     $(selector).each(function () {
         if (value_of.val() == $.trim($(this).text())) {
-            result =  true;
+            result = true;
         }
     });
     return result;
+}
+
+function get_all_categories() {
+    var classes = [];
+    $(category).each(function() {
+       classes.push($.trim($(this).text()));
+    });
+    return classes.join(",");
 }
 
 
@@ -65,6 +75,7 @@ category_input.bind(EV_ADD_CATEGORY, function () {
             ' </div>'
     );
     category_input.val("");
+    bookmarks_list.trigger(EV_UPDATE_BOOKMARKS);
 });
 
 //Action for click on delete of categories
@@ -75,6 +86,12 @@ $(document).on(EV_CLICK, ".delete-cat", function () {
             $(category + "." + item).remove();
         }
     });
+    bookmarks_list.trigger(EV_UPDATE_BOOKMARKS);
+});
+
+//Action for updating bookmarks
+bookmarks_list.bind(EV_UPDATE_BOOKMARKS, function () {
+    alert(get_all_categories());
 });
 
 //Action for click on bookmarks
