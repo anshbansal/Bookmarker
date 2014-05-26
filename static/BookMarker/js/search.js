@@ -72,7 +72,7 @@ $(document).on(EV_CLICK, ".delete-cat", function () {
     var classList = $(this).attr('class').split(/\s+/);
     $.each(classList, function (index, item) {
         if (item != 'delete-cat') {
-            $(category + item).remove();
+            $(category + "." + item).remove();
         }
     });
 });
