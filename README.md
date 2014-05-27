@@ -20,3 +20,6 @@ Credits
 http://startbootstrap.com/simple-sidebar
 
 http://www.jqueryautocomplete.com/jquery-autocomplete-json-example.html
+
+http://stackoverflow.com/questions/15928466/refresh-a-div-to-shows-new-rating-in-django-using-jquery-and-ajax
+

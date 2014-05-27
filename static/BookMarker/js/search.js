@@ -5,6 +5,7 @@ var static_img_url = cur_location + static_url + '/img';
 //Variables for URLs
 var url_autocomplete = "auto/";
 var url_open_page = "open/";
+var url_bookmark_refresh = "bookmarks/";
 
 //Variables for selector strings
 var category = ".category";
@@ -33,12 +34,11 @@ function value_in_selector(value_of, selector) {
 
 function get_all_categories() {
     var classes = [];
-    $(category).each(function() {
-       classes.push($.trim($(this).text()));
+    $(category).each(function () {
+        classes.push($.trim($(this).text()));
     });
     return classes.join(",");
 }
-
 
 //Autocomplete for category search box
 $(function () {
@@ -80,29 +80,25 @@ category_input.bind(EV_ADD_CATEGORY, function () {
 
 //Action for click on delete of categories
 $(document).on(EV_CLICK, ".delete-cat", function () {
-    var classList = $(this).attr('class').split(/\s+/);
-    $.each(classList, function (index, item) {
-        if (item != 'delete-cat') {
-            $(category + "." + item).remove();
-        }
-    });
+    $(category + "." + $(this).attr('class').substr(11)).remove();
     bookmarks_list.trigger(EV_UPDATE_BOOKMARKS);
 });
 
 //Action for updating bookmarks
 bookmarks_list.bind(EV_UPDATE_BOOKMARKS, function () {
-    alert(get_all_categories());
+    $.ajax({
+        url: url_bookmark_refresh,
+        data: {'categories': get_all_categories()},
+        success: function (output) {
+            $('#bookmarks').html(output);
+        }
+    });
 });
 
 //Action for click on bookmarks
 $(document).on(EV_CLICK, ".bookmark-class", function () {
-    var classList = $(this).attr('class').split(/\s+/);
-    $.each(classList, function (index, item) {
-        if (item != 'bookmark-class') {
-            $.ajax({
-                url: url_open_page,
-                data: {'id': item}
-            });
-        }
+    $.ajax({
+        url: url_open_page,
+        data: {'id': $(this).attr('class').substr(25)}
     });
 });
