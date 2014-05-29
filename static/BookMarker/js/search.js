@@ -1,11 +1,8 @@
-var cur_location = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
-var static_url = '/static/BookMarker';
-var static_img_url = cur_location + static_url + '/img';
-
 //Variables for URLs
 var url_autocomplete = "auto/";
 var url_open_page = "open/";
 var url_bookmark_refresh = "bookmarks/";
+var url_category = "category/";
 
 //Variables for selector strings
 var category = ".category";
@@ -60,6 +57,7 @@ category_input.bind(EV_ENTER_KEY, function () {
         alert("Not a category");
     } else if (value_in_selector(category_input, category) == true) {
         alert("Category already added");
+        category_input.val("");
     } else {
         $(this).trigger(EV_ADD_CATEGORY);
     }
@@ -67,20 +65,21 @@ category_input.bind(EV_ENTER_KEY, function () {
 
 //Action for addition of category on page
 category_input.bind(EV_ADD_CATEGORY, function () {
-    var val = category_input.val();
-    $("#category_list").append(
-        '<div class="img-rounded category ' + val + '">' +
-            '<img src="' + static_img_url + '/delete.png" class="delete-cat ' + val + '"  title="Remove category '
-            + val + '"/> ' + val +
-            ' </div>'
-    );
-    category_input.val("");
-    bookmarks_list.trigger(EV_UPDATE_BOOKMARKS);
+    $.ajax({
+        url: url_category,
+        data: {'value': category_input.val()},
+        success: function (output) {
+            $("#category_list").append(output);
+            category_input.val("");
+            bookmarks_list.trigger(EV_UPDATE_BOOKMARKS);
+        }
+    });
 });
 
 //Action for click on delete of categories
 $(document).on(EV_CLICK, ".delete-cat", function () {
-    $(category + "." + $(this).attr('class').substr(11)).remove();
+    var length_string = "delete-cat ".length;
+    $(category + "." + $(this).attr('class').substr(length_string)).remove();
     bookmarks_list.trigger(EV_UPDATE_BOOKMARKS);
 });
 

@@ -1,0 +1,5 @@
+{% load staticfiles %}
+<div class="img-rounded category {{ val }}">
+    <img src="{% static 'BookMarker/img/delete.png' %}" class="delete-cat {{ val }}"
+         title="Remove category {{ val }}"/> {{ val }}
+</div>

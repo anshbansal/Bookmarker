@@ -38,3 +38,9 @@ def get_bookmarks(request):
     return render(request, 'BookMarker/partials/bookmarks.html', {
         'bookmarks': bookmarks,
     })
+
+
+def add_category(request):
+    return render(request, 'BookMarker/partials/category.html', {
+            'val': request.GET.get('value', ''),
+        })
