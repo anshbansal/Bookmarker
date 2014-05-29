@@ -19,30 +19,23 @@
     <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bookmarker.css' %}">
 </head>
 
-<body>
-<div id="wrapper">
+<body id="wrapper">
 
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-        <div class="sidebar-nav">
-            <br><br>
-            <input type="text" class="form-control" id="category_inp" placeholder="Category" autofocus>
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+    <br><br>
+    <input type="text" class="form-control" id="category_inp" placeholder="Category" autofocus>
 
-            <div id="category_list">
-            </div>
-        </div>
+    <div id="category_list">
     </div>
+</div>
 
-    <!-- Page content -->
-    <div id="page-content-wrapper">
-        <div class="content-header">
-            <h1>
-                BookMarks
-            </h1>
-        </div>
-        <!-- Keep all page content within the page-content inset div! -->
-        <div class="page-content inset" id="bookmarks">
-        </div>
+<!-- Page content -->
+<div id="page-content-wrapper">
+    <h1 class="content-header">
+        BookMarks
+    </h1>
+    <div class="page-content" id="bookmarks">
     </div>
 </div>
 
