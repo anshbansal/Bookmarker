@@ -103,7 +103,7 @@ $(document).on(EV_CLICK, CLASS_DEL_CATEGORY, function () {
 BOOKMARK_LIST.bind(EV_UPDATE_BOOKMARKS, function () {
     $.ajax({
         url: URL_BOOKMARK_LIST,
-        data: {'categories': get_all_categories()},
+        data: {'ids': get_all_categories()},
         success: function (output) {
             BOOKMARK_LIST.html(output);
         }
