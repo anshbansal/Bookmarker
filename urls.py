@@ -10,6 +10,6 @@ urlpatterns = patterns('',
     # param - id
     url(r'^search/open/', views.website_open, name='website_open'),
     url(r'^search/bookmarks/', views.get_bookmarks, name='get_bookmarks'),
-    url(r'^search/category/', views.add_category, name='add_category'),
-    url(r'^search/$', views.get_category),
+    url(r'^search/category/', views.get_category, name='get_category'),
+    url(r'^search/$', views.search),
 )

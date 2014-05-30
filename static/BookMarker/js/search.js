@@ -1,21 +1,29 @@
 //Variables for URLs
-var url_autocomplete = "auto/";
-var url_open_page = "open/";
-var url_bookmark_refresh = "bookmarks/";
-var url_category = "category/";
+var URL_AUTOCOMPLETE = "auto/";
+var URL_PAGE_OPEN = "open/";
+var URL_BOOKMARK_LIST = "bookmarks/";
+var URL_CATEGORY = "category/";
 
 //Variables for selector strings
-var category = ".category";
+var CLASS_CATEGORY = ".category";
+var CLASS_DEL_CATEGORY = ".delete-cat";
+var CLASS_BOOKMARK = ".bookmark";
+var CLASS_UI_MENU_ITEM = ".ui-menu-item";
 
 //Variables for selectors
-var category_input = $("#category_inp");
-var bookmarks_list = $("#bookmarks");
+var CATEGORY_INPUT = $("#category_inp");
+var BOOKMARK_LIST = $("#bookmarks");
+var CATEGORY_LIST = $("#category_list");
 
 //Variables for event names
 var EV_ENTER_KEY = "enterKey";
 var EV_ADD_CATEGORY = "addCategory";
 var EV_CLICK = "click";
 var EV_UPDATE_BOOKMARKS = "updateBooks";
+
+//Variables for messages
+var MSG_NOT_CATEGORY = "Not a category";
+var MSG_CATEGORY_ADDED = "Category already added";
 
 
 //Auxiliary functions
@@ -29,75 +37,83 @@ function value_in_selector(value_of, selector) {
     return result;
 }
 
+function get_substring(cur_object, cur_attr, start_length) {
+    return $(cur_object).attr(cur_attr).substr(start_length);
+}
+
+function get_class_string(cur_object, start_length) {
+    return get_substring(cur_object, 'class', start_length);
+}
+
 function get_all_categories() {
-    var classes = [];
-    $(category).each(function () {
-        classes.push($.trim($(this).text()));
+    var class_ids = [];
+    $(CLASS_DEL_CATEGORY).each(function () {
+        class_ids.push(get_class_string(this, 11));
     });
-    return classes.join(",");
+    return class_ids.join(",");
 }
 
 //Autocomplete for category search box
 $(function () {
-    category_input.autocomplete({
-        source: url_autocomplete
+    CATEGORY_INPUT.autocomplete({
+        source: URL_AUTOCOMPLETE
     });
 });
 
 //Bindings for keys to Search Box
-category_input.keyup(function (e) {
+CATEGORY_INPUT.keyup(function (e) {
     if (e.keyCode == 13) {
         $(this).trigger(EV_ENTER_KEY);
     }
 });
 
 //Action for Search box Enter press
-category_input.bind(EV_ENTER_KEY, function () {
-    if (value_in_selector(category_input, ".ui-menu-item") == false) {
-        alert("Not a category");
-    } else if (value_in_selector(category_input, category) == true) {
-        alert("Category already added");
-        category_input.val("");
+CATEGORY_INPUT.bind(EV_ENTER_KEY, function () {
+    if (value_in_selector(CATEGORY_INPUT, CLASS_UI_MENU_ITEM) == false) {
+        alert(MSG_NOT_CATEGORY);
+    } else if (value_in_selector(CATEGORY_INPUT, CLASS_CATEGORY) == true) {
+        alert(MSG_CATEGORY_ADDED);
+        CATEGORY_INPUT.val("");
     } else {
         $(this).trigger(EV_ADD_CATEGORY);
     }
 });
 
 //Action for addition of category on page
-category_input.bind(EV_ADD_CATEGORY, function () {
+CATEGORY_INPUT.bind(EV_ADD_CATEGORY, function () {
     $.ajax({
-        url: url_category,
-        data: {'value': category_input.val()},
+        url: URL_CATEGORY,
+        data: {'value': CATEGORY_INPUT.val()},
         success: function (output) {
-            $("#category_list").append(output);
-            category_input.val("");
-            bookmarks_list.trigger(EV_UPDATE_BOOKMARKS);
+            CATEGORY_LIST.append(output);
+            CATEGORY_INPUT.val("");
+            BOOKMARK_LIST.trigger(EV_UPDATE_BOOKMARKS);
         }
     });
 });
 
 //Action for click on delete of categories
-$(document).on(EV_CLICK, ".delete-cat", function () {
-    var length_string = "delete-cat ".length;
-    $(category + "." + $(this).attr('class').substr(length_string)).remove();
-    bookmarks_list.trigger(EV_UPDATE_BOOKMARKS);
+$(document).on(EV_CLICK, CLASS_DEL_CATEGORY, function () {
+    var category_id = get_class_string(this, CLASS_DEL_CATEGORY.length);
+    $(CLASS_CATEGORY + "." + category_id).remove();
+    BOOKMARK_LIST.trigger(EV_UPDATE_BOOKMARKS);
 });
 
 //Action for updating bookmarks
-bookmarks_list.bind(EV_UPDATE_BOOKMARKS, function () {
+BOOKMARK_LIST.bind(EV_UPDATE_BOOKMARKS, function () {
     $.ajax({
-        url: url_bookmark_refresh,
+        url: URL_BOOKMARK_LIST,
         data: {'categories': get_all_categories()},
         success: function (output) {
-            $('#bookmarks').html(output);
+            BOOKMARK_LIST.html(output);
         }
     });
 });
 
 //Action for click on bookmarks
-$(document).on(EV_CLICK, ".bookmark-class", function () {
+$(document).on(EV_CLICK, CLASS_BOOKMARK, function () {
     $.ajax({
-        url: url_open_page,
-        data: {'id': $(this).attr('class').substr(25)}
+        url: URL_PAGE_OPEN,
+        data: {'id': get_class_string(this, 25)}
     });
 });

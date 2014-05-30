@@ -8,7 +8,7 @@ import json
 import webbrowser
 
 
-def get_category(request):
+def search(request):
     return render(request, 'BookMarker/search.html')
 
 
@@ -34,13 +34,14 @@ def get_bookmarks(request):
     category_list = [] if category_string == '' else category_string.split(',')
     bookmarks = set()
     for i in category_list:
-        bookmarks.update(Category.objects.get(name=i).bookmark_set.all())
+        bookmarks.update(Category.objects.get(pk=i).bookmark_set.all())
     return render(request, 'BookMarker/partials/bookmarks.html', {
         'bookmarks': bookmarks,
     })
 
 
-def add_category(request):
+def get_category(request):
+    category = Category.objects.get(name=request.GET.get('value', ''))
     return render(request, 'BookMarker/partials/category.html', {
-            'val': request.GET.get('value', ''),
+            'category': category,
         })
