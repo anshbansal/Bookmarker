@@ -9,13 +9,6 @@
     <meta name="author" content="Aseem">
 
     <title>Search Bookmarks</title>
-
-    <!-- CSS Libraries -->
-    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bootstrap.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/jquery-ui-1.10.4.css' %}" media="all"/>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/search.css' %}">
 </head>
 
 <body id="wrapper">
@@ -34,14 +27,16 @@
     <h1 class="content-header">
         BookMarks
     </h1>
+
     <div class="page-content" id="bookmarks">
     </div>
 </div>
 
-<!-- JavaScript libraries -->
-<script src="{% static 'BookMarker/js/jquery-2.1.1.js' %}"></script>
-<script src="{% static 'BookMarker/js/bootstrap.js' %}"></script>
-<script src="{% static 'BookMarker/js/jquery-ui.min-1.8.16.js' %}"></script>
+<!-- Libraries Include -->
+{% include 'BookMarker/partials/libraries.html' %}
+
+<!-- Custom CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/search.css' %}">
 
 <!-- Custom JavaScript -->
 <script src="{% static 'BookMarker/js/search.js' %}"></script>

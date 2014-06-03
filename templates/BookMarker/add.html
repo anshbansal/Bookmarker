@@ -4,21 +4,16 @@
 <html lang="en">
 <head>
     <title>Add BookMarks</title>
-
-    <!-- CSS Libraries -->
-    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bootstrap.css' %}">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/add.css' %}">
 </head>
 <body class="container">
 <input type="text" class="img-rounded box" id="bookmark-name" autofocus placeholder="Name of Bookmark" size="40"><br>
-<input type="text" class="img-rounded box" id="bookmark-url"  autofocus placeholder="URL" size="80">
+<input type="text" class="img-rounded box" id="bookmark-url" autofocus placeholder="URL" size="80">
 
-<!-- JavaScript libraries -->
-<script src="{% static 'BookMarker/js/jquery-2.1.1.js' %}"></script>
-<script src="{% static 'BookMarker/js/bootstrap.js' %}"></script>
-<script src="{% static 'BookMarker/js/jquery-ui.min-1.8.16.js' %}"></script>
+<!-- Libraries Include -->
+{% include 'BookMarker/partials/libraries.html' %}
+
+<!-- Custom CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/add.css' %}">
 
 <!-- Custom JavaScript -->
 <script src="{% static 'BookMarker/js/add.js' %}"></script>
