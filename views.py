@@ -7,6 +7,9 @@ import json
 import webbrowser
 
 
+###########################
+##       Auxiliary       ##
+###########################
 def _get_objects_by_ids(request, object_class):
     ids_string = request.GET.get('ids', '')
     if ids_string == '':
@@ -15,20 +18,35 @@ def _get_objects_by_ids(request, object_class):
     return [object_class.objects.get(pk=_id) for _id in ids]
 
 
-def _get_json_autocomplete(cur_objects, func):
-    results = []
-    for cur_object in cur_objects:
-        results.append(func(cur_object))
-    return json.dumps(results)
+class Autocomplete():
+    @staticmethod
+    def _get_json(cur_objects, func):
+        results = []
+        for cur_object in cur_objects:
+            results.append(func(cur_object))
+        return json.dumps(results)
+
+    @staticmethod
+    def autocomplete(request, class_name, attr_name):
+        term = request.GET.get('term', '')
+        data = Autocomplete._get_json(
+            class_name.objects.filter(**{
+                attr_name + '__icontains': term
+            }),
+            lambda x: getattr(x, attr_name)
+        )
+        return HttpResponse(data, 'application/json')
 
 
+###########################
+##         Services      ##
+###########################
 def category_autocomplete(request):
-    term = request.GET.get('term', '')
-    data = _get_json_autocomplete(
-        Category.objects.filter(name__icontains=term),
-        lambda x: x.name
-    )
-    return HttpResponse(data, 'application/json')
+    return Autocomplete.autocomplete(request, Category, 'name')
+
+
+def bookmark_autocomplete(request):
+    return Autocomplete.autocomplete(request, BookMark, 'name')
 
 
 def website_open(request):
@@ -54,7 +72,9 @@ def get_category(request):
     })
 
 
-#Functions for Views
+########################
+##        Views       ##
+########################
 def search(request):
     return render(request, 'BookMarker/search.html')
 
