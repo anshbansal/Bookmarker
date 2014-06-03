@@ -10,6 +10,10 @@ var CLASS_DEL_CATEGORY = ".delete-cat";
 var CLASS_BOOKMARK = ".bookmark";
 var CLASS_UI_MENU_ITEM = ".ui-menu-item";
 
+//Variables for getting length of classes
+var LEN_DEL_CATEGORY = "delete-cat ".length;
+var LEN_BOOK_CATEGORY = "col-md-12 bookmark ".length;
+
 //Variables for selectors
 var CATEGORY_INPUT = $("#category_inp");
 var BOOKMARK_LIST = $("#bookmarks");
@@ -94,7 +98,7 @@ CATEGORY_INPUT.bind(EV_ADD_CATEGORY, function () {
 
 //Action for click on delete of categories
 $(document).on(EV_CLICK, CLASS_DEL_CATEGORY, function () {
-    var category_id = get_class_string(this, CLASS_DEL_CATEGORY.length);
+    var category_id = get_class_string(this, LEN_DEL_CATEGORY);
     $(CLASS_CATEGORY + "." + category_id).remove();
     BOOKMARK_LIST.trigger(EV_UPDATE_BOOKMARKS);
 });
@@ -114,6 +118,6 @@ BOOKMARK_LIST.bind(EV_UPDATE_BOOKMARKS, function () {
 $(document).on(EV_CLICK, CLASS_BOOKMARK, function () {
     $.ajax({
         url: URL_PAGE_OPEN,
-        data: {'id': get_class_string(this, 25)}
+        data: {'id': get_class_string(this, LEN_BOOK_CATEGORY)}
     });
 });

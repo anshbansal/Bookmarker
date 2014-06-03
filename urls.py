@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^search/bookmarks/', views.get_bookmarks, name='get_bookmarks'),
     url(r'^search/category/', views.get_category, name='get_category'),
     url(r'^search/$', views.search),
+    url(r'^add/$', views.add),
 )

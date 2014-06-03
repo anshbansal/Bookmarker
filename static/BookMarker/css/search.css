@@ -1,6 +1,7 @@
 #wrapper {
     padding-left: 250px;
     transition: all 0.4s ease 0s;
+    background-color: #eee;
 }
 
 #sidebar-wrapper {
@@ -8,7 +9,7 @@
     top: 0;
     left: 250px;
     width: 250px;
-    background: #000;
+    background-color: #000;
     position: absolute;
     height: 100%;
     overflow-y: auto;
@@ -29,4 +30,19 @@
 
 .page-content {
     padding: 20px;
+}
+
+.category {
+    color: lightslategray;
+    display: inline-block;
+    background-color: #ffffff;
+    margin: 5px;
+    padding-right: 7px;
+    padding-left: 3px;
+}
+
+#category_inp {
+    text-align: right;
+    width: 80%;
+    margin: auto;
 }
