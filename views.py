@@ -10,8 +10,8 @@ import webbrowser
 ###########################
 ##       Auxiliary       ##
 ###########################
-def _get_objects_by_ids(request, object_class):
-    ids_string = request.GET.get('ids', '')
+def _get_objects_by_params(request, param_name, object_class):
+    ids_string = request.GET.get(param_name, '')
     if ids_string == '':
         return []
     ids = ids_string.split(',')
@@ -50,13 +50,13 @@ def bookmark_autocomplete(request):
 
 
 def website_open(request):
-    q = request.GET.get('id', '')
-    webbrowser.open(BookMark.objects.get(pk=int(q)).url_content)
-    return HttpResponse('', 'text/html')
+    cur_url = _get_objects_by_params(request, 'id', BookMark)[0].url_content
+    webbrowser.open(cur_url)
+    return HttpResponse('success', 'text/html')
 
 
 def get_bookmarks(request):
-    categories = _get_objects_by_ids(request, Category)
+    categories = _get_objects_by_params(request, 'ids', Category)
     bookmarks = set()
     for category in categories:
         bookmarks.update(category.bookmark_set.all())
@@ -76,8 +76,4 @@ def get_category(request):
 ##        Views       ##
 ########################
 def search(request):
-    return render(request, 'BookMarker/search.html')
-
-
-def add(request):
-    return render(request, 'BookMarker/add.html')
+    return render(request, 'BookMarker/bookmarker.html')

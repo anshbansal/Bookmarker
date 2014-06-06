@@ -11,7 +11,13 @@
     <title>Search Bookmarks</title>
 </head>
 
-<body id="wrapper">
+<body id="wrapper"></body>
+
+<div class="navbar navbar-fixed-top" id="top-wrapper">
+    <input type="text" class="img-rounded box" id="bookmark-name" autofocus placeholder="Name of Bookmark" size="40">
+    <input type="text" class="img-rounded box" id="bookmark-url" autofocus placeholder="URL" size="80"><br>
+
+</div>
 
 <!-- Sidebar -->
 <div id="sidebar-wrapper">
@@ -25,6 +31,7 @@
 <!-- Page content -->
 <div id="page-content-wrapper">
     <h1 class="content-header">
+        <img src="{% static 'BookMarker/img/download.jpg' %}" class="add-category" style="height: 15px; width: 15px">
         BookMarks
     </h1>
 
@@ -36,9 +43,9 @@
 {% include 'BookMarker/partials/libraries.html' %}
 
 <!-- Custom CSS -->
-<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/search.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'BookMarker/css/bookmarker.css' %}">
 
 <!-- Custom JavaScript -->
-<script src="{% static 'BookMarker/js/search.js' %}"></script>
+<script src="{% static 'BookMarker/js/bookmarker.js' %}"></script>
 </body>
 </html>

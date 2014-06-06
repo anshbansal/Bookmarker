@@ -4,6 +4,17 @@
     background-color: #eee;
 }
 
+.padding-wrapper {
+    padding-top: 80px;
+}
+
+#top-wrapper {
+    /*background-color: #c0c0c0;*/
+    margin-left: 250px;
+    height: 80px;
+    padding-left: 80px;
+}
+
 #sidebar-wrapper {
     margin-left: -250px;
     top: 0;
@@ -45,4 +56,14 @@
     text-align: right;
     width: 80%;
     margin: auto;
+}
+
+.box {
+    margin: 10px auto;
+    position: relative;
+    height: auto;
+}
+
+input {
+    text-align: center;
 }

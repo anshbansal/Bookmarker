@@ -1,5 +1,6 @@
 //Variables for URLs
-var URL_AUTOCOMPLETE = "auto/";
+var URL_CATEGORY_AUTO = "auto/category/";
+var URL_BOOKMARK_AUTO = "auto/bookmark/";
 var URL_PAGE_OPEN = "open/";
 var URL_BOOKMARK_LIST = "bookmarks/";
 var URL_CATEGORY = "category/";
@@ -18,6 +19,8 @@ var LEN_BOOK_CATEGORY = "col-md-12 bookmark ".length;
 var CATEGORY_INPUT = $("#category_inp");
 var BOOKMARK_LIST = $("#bookmarks");
 var CATEGORY_LIST = $("#category_list");
+var BOOKMARK_NAME = $("#bookmark-name");
+var BODY_WRAPPER = $("#wrapper");
 
 //Variables for event names
 var EV_ENTER_KEY = "enterKey";
@@ -57,10 +60,14 @@ function get_all_categories() {
     return class_ids.join(",");
 }
 
-//Autocomplete for category search box
+//Action for body Load
 $(function () {
+    $("#top-wrapper").toggle();
     CATEGORY_INPUT.autocomplete({
-        source: URL_AUTOCOMPLETE
+        source: URL_CATEGORY_AUTO
+    });
+    BOOKMARK_NAME.autocomplete({
+        source: URL_BOOKMARK_AUTO
     });
 });
 
@@ -120,4 +127,9 @@ $(document).on(EV_CLICK, CLASS_BOOKMARK, function () {
         url: URL_PAGE_OPEN,
         data: {'id': get_class_string(this, LEN_BOOK_CATEGORY)}
     });
+});
+
+$(document).on(EV_CLICK, ".add-category", function() {
+    BODY_WRAPPER.toggleClass("padding-wrapper");
+    $("#top-wrapper").toggle();
 });
