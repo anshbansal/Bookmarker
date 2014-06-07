@@ -11,36 +11,38 @@
     <title>Search Bookmarks</title>
 </head>
 
-<body id="wrapper"></body>
-
-<div class="navbar navbar-fixed-top" id="top-wrapper">
-    <input type="text" class="img-rounded box" id="bookmark-name" autofocus placeholder="Name of Bookmark" size="40">
-    <input type="text" class="img-rounded box" id="bookmark-url" autofocus placeholder="URL" size="80">
-    <input type="text" class="img-rounded" id="category-box" autofocus placeholder="Category" size="40">
-
-    <div id="category_list_add">
-    </div>
-</div>
-
+<body>
 <!-- Sidebar -->
-<div id="sidebar-wrapper">
+<section id="sidebar-wrapper">
     <br><br>
     <input type="text" class="form-control" id="category_inp" placeholder="Category" autofocus>
 
     <div id="category_list_search">
     </div>
-</div>
+</section>
 
-<!-- Page content -->
-<div id="page-content-wrapper">
-    <h1 class="content-header">
-        <img src="{% static 'BookMarker/img/download.jpg' %}" class="add-bookmark" style="height: 15px; width: 15px">
-        BookMarks
-    </h1>
+<section id="body-wrapper">
+    <section class="navbar navbar-fixed-top" id="top-wrapper">
+        <input type="text" class="img-rounded box" id="bookmark-name" autofocus placeholder="Name of Bookmark"
+               size="40">
+        <input type="text" class="img-rounded box" id="bookmark-url" autofocus placeholder="URL" size="80">
+        <input type="text" class="img-rounded" id="category-box" autofocus placeholder="Category" size="40">
 
-    <div class="page-content" id="bookmarks">
-    </div>
-</div>
+        <div id="category_list_add">
+        </div>
+    </section>
+
+    <!-- Page content -->
+    <section id="page-content-wrapper">
+        <h1 class="content-header">
+            <img src="{% static 'BookMarker/img/download.jpg' %}" id="add-bookmark">
+            BookMarks
+        </h1>
+
+        <div id="bookmarks-list">
+        </div>
+    </section>
+</section>
 
 <!-- Libraries Include -->
 {% include 'BookMarker/partials/libraries.html' %}

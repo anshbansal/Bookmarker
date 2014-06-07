@@ -17,9 +17,8 @@ Anyone interested in helping to improve UI please start a issue.
 
 Credits
 =======
-http://startbootstrap.com/simple-sidebar
-
-http://www.jqueryautocomplete.com/jquery-autocomplete-json-example.html
-
-http://stackoverflow.com/questions/15928466/refresh-a-div-to-shows-new-rating-in-django-using-jquery-and-ajax
-
+These are the places that I looked at besides documentation and stackoverflow while building this. 
+- http://startbootstrap.com/simple-sidebar
+- http://www.jqueryautocomplete.com/jquery-autocomplete-json-example.html
+- http://stackoverflow.com/questions/15928466/refresh-a-div-to-shows-new-rating-in-django-using-jquery-and-ajax
+- http://learn.shayhowe.com/html-css

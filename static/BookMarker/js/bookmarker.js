@@ -10,7 +10,7 @@ var CLASS_CATEGORY = ".category";
 var CLASS_DEL_CATEGORY = ".delete-cat";
 var CLASS_BOOKMARK = ".bookmark";
 var CLASS_UI_MENU_ITEM = ".ui-menu-item";
-var CLASS_ADD_BOOKMARK = ".add-bookmark";
+var ID_ADD_BOOKMARK = "#add-bookmark";
 
 //Variables for getting length of classes
 var LEN_DEL_CATEGORY = "delete-cat ".length;
@@ -18,11 +18,10 @@ var LEN_BOOK_CATEGORY = "col-md-12 bookmark ".length;
 
 //Variables for selectors
 var CATEGORY_INPUT = $("#category_inp");
-var BOOKMARK_LIST = $("#bookmarks");
+var BOOKMARK_LIST = $("#bookmarks-list");
 var CATEGORY_LIST_SEARCH = $("#category_list_search");
 var CATEGORY_LIST_ADD = $("#category_list_add");
 var BOOKMARK_NAME = $("#bookmark-name");
-var BODY_WRAPPER = $("#wrapper");
 var CATEGORY_BOX = $("#category-box");
 var TOP_WRAPPER = $("#top-wrapper");
 
@@ -169,7 +168,7 @@ BOOKMARK_LIST.on({
             url: URL_BOOKMARK_LIST,
             data: {'ids': get_all_categories()},
             success: function (output) {
-                $(this).html(output);
+                BOOKMARK_LIST.html(output);
             }
         });
     },
@@ -195,8 +194,7 @@ $(document).on(EV_CLICK, CLASS_BOOKMARK, function () {
 });
 
 //Actions for Show/Hide Bookmark addition screen
-$(document).on(EV_CLICK, CLASS_ADD_BOOKMARK, function () {
-    BODY_WRAPPER.toggleClass("padding-wrapper");
+$(document).on(EV_CLICK, ID_ADD_BOOKMARK, function () {
     TOP_WRAPPER.toggle();
     CATEGORY_INPUT.trigger(EV_CLEAR_ALL);
 });
