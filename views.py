@@ -29,10 +29,16 @@ class Autocomplete():
     @staticmethod
     def autocomplete(request, class_name, attr_name):
         term = request.GET.get('term', '')
+        objects = class_name.objects.filter(**{
+            attr_name + '__icontains': term
+        })
+
+        exclude_value = request.GET.get("excludes", "")
+        if exclude_value != "":
+            objects = objects.exclude(id__in=[int(i) for i in exclude_value.split(",")])
+
         data = Autocomplete._get_json(
-            class_name.objects.filter(**{
-                attr_name + '__icontains': term
-            }),
+            objects,
             lambda x: getattr(x, attr_name)
         )
         return HttpResponse(data, 'application/json')

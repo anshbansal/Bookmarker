@@ -67,11 +67,17 @@ $(function () {
     TOP_WRAPPER.toggle();
 
     CATEGORY_INPUT.autocomplete({
-        source: URL_CATEGORY_AUTO
+        source: function (request, response) {
+            $.getJSON(URL_CATEGORY_AUTO, { excludes: get_all_categories(), term: CATEGORY_INPUT.val() },
+                response);
+        }
     });
 
     CATEGORY_BOX.autocomplete({
-        source: URL_CATEGORY_AUTO
+        source: function (request, response) {
+            $.getJSON(URL_CATEGORY_AUTO, { excludes: get_all_categories(), term: CATEGORY_BOX.val() },
+                response);
+        }
     });
 
     BOOKMARK_NAME.autocomplete({
