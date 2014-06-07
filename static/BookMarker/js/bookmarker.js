@@ -10,6 +10,7 @@ var CLASS_CATEGORY = ".category";
 var CLASS_DEL_CATEGORY = ".delete-cat";
 var CLASS_BOOKMARK = ".bookmark";
 var CLASS_UI_MENU_ITEM = ".ui-menu-item";
+var CLASS_ADD_BOOKMARK = ".add-bookmark";
 
 //Variables for getting length of classes
 var LEN_DEL_CATEGORY = "delete-cat ".length;
@@ -21,6 +22,8 @@ var BOOKMARK_LIST = $("#bookmarks");
 var CATEGORY_LIST = $("#category_list");
 var BOOKMARK_NAME = $("#bookmark-name");
 var BODY_WRAPPER = $("#wrapper");
+var CATEGORY_BOX = $("#category-box");
+var TOP_WRAPPER = $("#top-wrapper");
 
 //Variables for event names
 var EV_ENTER_KEY = "enterKey";
@@ -60,47 +63,79 @@ function get_all_categories() {
     return class_ids.join(",");
 }
 
+function bind_events(cur_obj, e) {
+    if (e.keyCode == 13) {
+        $(cur_obj).trigger(EV_ENTER_KEY);
+    }
+}
+
 //Action for body Load
 $(function () {
-    $("#top-wrapper").toggle();
+    TOP_WRAPPER.toggle();
+
     CATEGORY_INPUT.autocomplete({
         source: URL_CATEGORY_AUTO
     });
+
+    CATEGORY_BOX.autocomplete({
+        source: URL_CATEGORY_AUTO
+    });
+
     BOOKMARK_NAME.autocomplete({
         source: URL_BOOKMARK_AUTO
     });
 });
 
-//Bindings for keys to Search Box
-CATEGORY_INPUT.keyup(function (e) {
-    if (e.keyCode == 13) {
-        $(this).trigger(EV_ENTER_KEY);
-    }
-});
-
-//Action for Search box Enter press
-CATEGORY_INPUT.bind(EV_ENTER_KEY, function () {
-    if (value_in_selector(CATEGORY_INPUT, CLASS_UI_MENU_ITEM) == false) {
+//Auxiliary functions for categories
+function enter_category(category_box, trigger_event, trigger_data) {
+    if (value_in_selector(category_box, CLASS_UI_MENU_ITEM) == false) {
         alert(MSG_NOT_CATEGORY);
-    } else if (value_in_selector(CATEGORY_INPUT, CLASS_CATEGORY) == true) {
+    } else if (value_in_selector(category_box, CLASS_CATEGORY) == true) {
         alert(MSG_CATEGORY_ADDED);
-        CATEGORY_INPUT.val("");
+        category_box.val("");
     } else {
-        $(this).trigger(EV_ADD_CATEGORY);
+        category_box.trigger(trigger_event, trigger_data);
     }
-});
+}
 
-//Action for addition of category on page
-CATEGORY_INPUT.bind(EV_ADD_CATEGORY, function () {
+function add_category(cur_obj, e, data) {
     $.ajax({
         url: URL_CATEGORY,
-        data: {'value': CATEGORY_INPUT.val()},
+        data: {'value': $(cur_obj).val()},
         success: function (output) {
-            CATEGORY_LIST.append(output);
-            CATEGORY_INPUT.val("");
-            BOOKMARK_LIST.trigger(EV_UPDATE_BOOKMARKS);
+            data.cat_list.append(output);
+            $(cur_obj).val("");
+            data.book_list.trigger(data.next_trig);
         }
     });
+}
+
+//Actions for Category Search box
+CATEGORY_INPUT.on({
+    keyup: function (e) {
+        bind_events(this, e);
+    },
+
+    "enterKey": function () {
+        enter_category(CATEGORY_INPUT, EV_ADD_CATEGORY, [
+            {
+                cat_list: CATEGORY_LIST,
+                book_list: BOOKMARK_LIST,
+                next_trig: EV_UPDATE_BOOKMARKS
+            }
+        ])
+    },
+
+    "addCategory": function (e, data) {
+        add_category(this, e, data);
+    }
+});
+
+//Actions for bookmark add's category box
+CATEGORY_BOX.on({
+    keyup: function (e) {
+        bind_events(this, e);
+    }
 });
 
 //Action for click on delete of categories
@@ -129,7 +164,8 @@ $(document).on(EV_CLICK, CLASS_BOOKMARK, function () {
     });
 });
 
-$(document).on(EV_CLICK, ".add-category", function() {
+$(document).on(EV_CLICK, CLASS_ADD_BOOKMARK, function () {
     BODY_WRAPPER.toggleClass("padding-wrapper");
-    $("#top-wrapper").toggle();
+    TOP_WRAPPER.toggle();
+    $(CLASS_CATEGORY).remove();
 });

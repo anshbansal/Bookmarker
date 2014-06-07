@@ -4,8 +4,8 @@ from BookMarker import views
 
 urlpatterns = patterns('',
     # Returns by like search param(term)
-    url(r'^auto/category/', views.category_autocomplete, name='category_autocomplete'),
-    url(r'^auto/bookmark/', views.bookmark_autocomplete, name='bookmark_autocomplete'),
+    url(r'^auto/category/', views.category_autocomplete, name='category_auto'),
+    url(r'^auto/bookmark/', views.bookmark_autocomplete, name='bookmark_auto'),
 
     # Server opens web pages by ID param(id)
     url(r'^open/', views.website_open, name='website_open'),
