@@ -27,12 +27,10 @@ var TOP_WRAPPER = $("#top-wrapper");
 var ADD_BOOKMARKS = $("#add-bookmark");
 
 //Variables for event names
-var EV_ENTER_KEY = "enterKey";
 var EV_ADD_CATEGORY = "addCategory";
 var EV_CLICK = "click";
 var EV_UPDATE_BOOKMARKS = "updateBookmarks";
 var EV_CLEAR_ALL = "clearAll";
-var EV_ALT_N = "clickAltN";
 
 
 //Auxiliary functions
@@ -53,9 +51,9 @@ function getClassString(curObj, start) {
 function bindEvents(curObj, e) {
     var triggerName = "";
     if (e.keyCode == 13) {
-        triggerName = EV_ENTER_KEY;
+        triggerName = "enterKey";
     } else if (e.altKey && e.keyCode == "N".charCodeAt(0)) {
-        triggerName = EV_ALT_N;
+        triggerName = "clickAltN";
     }
     $(curObj).trigger(triggerName);
 }
