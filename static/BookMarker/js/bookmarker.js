@@ -10,7 +10,6 @@ var CLASS_CATEGORY = ".category";
 var CLASS_DEL_CATEGORY = ".delete-cat";
 var CLASS_BOOKMARK = ".bookmark";
 var CLASS_UI_MENU_ITEM = ".ui-menu-item";
-var ID_ADD_BOOKMARK = "#add-bookmark";
 
 //Variables for getting length of classes
 var LEN_DEL_CATEGORY = "delete-cat ".length;
@@ -24,6 +23,7 @@ var CATEGORY_LIST_ADD = $("#category_list_add");
 var BOOKMARK_NAME = $("#bookmark-name");
 var CATEGORY_BOX = $("#category-box");
 var TOP_WRAPPER = $("#top-wrapper");
+var ADD_BOOKMARKS = $("#add-bookmark");
 
 //Variables for event names
 var EV_ENTER_KEY = "enterKey";
@@ -31,6 +31,7 @@ var EV_ADD_CATEGORY = "addCategory";
 var EV_CLICK = "click";
 var EV_UPDATE_BOOKMARKS = "updateBookmarks";
 var EV_CLEAR_ALL = "clearAll";
+var EV_ALT_N = "clickAltN";
 
 //Variables for messages
 var MSG_NOT_CATEGORY = "Not a category";
@@ -57,9 +58,13 @@ function get_class_string(cur_object, start_length) {
 }
 
 function bind_events(cur_obj, e) {
+    var trigger_name = "";
     if (e.keyCode == 13) {
-        $(cur_obj).trigger(EV_ENTER_KEY);
+        trigger_name = EV_ENTER_KEY;
+    } else if (e.altKey && e.keyCode == "N".charCodeAt(0)) {
+        trigger_name = EV_ALT_N;
     }
+    $(cur_obj).trigger(trigger_name);
 }
 
 //Action for body Load
@@ -192,7 +197,7 @@ $(document).on(EV_CLICK, CLASS_DEL_CATEGORY, function () {
 });
 
 //Actions for Bookmark
-$(document).on(EV_CLICK, CLASS_BOOKMARK, function () {
+BOOKMARK_LIST.on(EV_CLICK, CLASS_BOOKMARK, function () {
     $.ajax({
         url: URL_PAGE_OPEN,
         data: {'id': get_class_string(this, LEN_BOOK_CATEGORY)}
@@ -200,7 +205,9 @@ $(document).on(EV_CLICK, CLASS_BOOKMARK, function () {
 });
 
 //Actions for Show/Hide Bookmark addition screen
-$(document).on(EV_CLICK, ID_ADD_BOOKMARK, function () {
-    TOP_WRAPPER.toggle();
-    CATEGORY_INPUT.trigger(EV_CLEAR_ALL);
+ADD_BOOKMARKS.on({
+    click: function () {
+        TOP_WRAPPER.toggle();
+        CATEGORY_INPUT.trigger(EV_CLEAR_ALL);
+    }
 });
