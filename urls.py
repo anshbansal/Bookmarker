@@ -10,7 +10,8 @@ urlpatterns = patterns('',
     # Server opens web pages by ID param(id)
     url(r'^open/', views.website_open, name='website_open'),
 
-    url(r'^bookmarks/', views.get_bookmarks, name='get_bookmarks'),
+    url(r'^bookmark/category/', views.get_bookmarks, name='get_bookmarks'),
+    url(r'^bookmark/name/', views.get_bookmark_by_name, name='get_bookmark_by_name'),
     url(r'^category/', views.get_category, name='get_category'),
     url(r'^$', views.search),
 )

@@ -2,7 +2,8 @@
 var URL_CATEGORY_AUTO = "auto/category/";
 var URL_BOOKMARK_AUTO = "auto/bookmark/";
 var URL_PAGE_OPEN = "open/";
-var URL_BOOKMARK_LIST = "bookmarks/";
+var URL_BOOKMARK_LIST = "bookmark/category/";
+var URL_BOOKMARK_BY_NAME = "bookmark/name/";
 var URL_CATEGORY = "category/";
 
 //Variables for selector strings
@@ -99,23 +100,24 @@ function get_all_categories() {
     return class_ids.join(",");
 }
 
-function enter_category(category_box, trigger_event, trigger_data) {
+function test_category(category_box) {
     if (value_in_selector(category_box, CLASS_UI_MENU_ITEM) == false) {
         alert(MSG_NOT_CATEGORY);
     } else if (value_in_selector(category_box, CLASS_CATEGORY) == true) {
         alert(MSG_CATEGORY_ADDED);
         category_box.val("");
     } else {
-        category_box.trigger(trigger_event, trigger_data);
+        return true;
     }
+    return false;
 }
 
-function add_category(cur_obj, e, data) {
+function add_category(cur_obj, cat_list, data) {
     $.ajax({
         url: URL_CATEGORY,
         data: {'value': $(cur_obj).val()},
         success: function (output) {
-            data.cat_list.append(output);
+            cat_list.append(output);
             $(cur_obj).val("");
             if (data.trigger_obj !== undefined) {
                 data.trigger_obj.trigger(data.next_trig);
@@ -124,52 +126,66 @@ function add_category(cur_obj, e, data) {
     });
 }
 
-//Actions for Search's category box
-CATEGORY_INPUT.on({
+function delete_cat(cur_obj) {
+    var category_id = get_class_string(cur_obj, LEN_DEL_CATEGORY);
+    $(CLASS_CATEGORY + "." + category_id).remove();
+}
+
+//Actions common to both category boxes
+$("#category_inp,#category-box").on({
     keyup: function (e) {
         bind_events(this, e);
     },
-
     "enterKey": function () {
-        enter_category($(this), EV_ADD_CATEGORY, [
-            {
-                cat_list: CATEGORY_LIST_SEARCH,
-                trigger_obj: BOOKMARK_LIST,
-                next_trig: EV_UPDATE_BOOKMARKS
-            }
-        ])
+        if (test_category($(this))) {
+            $(this).trigger(EV_ADD_CATEGORY);
+        }
     },
-
-    "addCategory": function (e, data) {
-        add_category(this, e, data);
-    },
-
     "clearAll": function () {
-        $(CLASS_CATEGORY).remove();
         $(this).val("");
-        BOOKMARK_LIST.trigger(EV_CLEAR_ALL);
+
+    }
+});
+
+//Actions for Search's category box
+CATEGORY_INPUT.on({
+    "addCategory": function () {
+        add_category(this, CATEGORY_LIST_SEARCH, {
+            trigger_obj: BOOKMARK_LIST,
+            next_trig: EV_UPDATE_BOOKMARKS
+        });
     }
 });
 
 //Actions for Add Bookmark's category box
 CATEGORY_BOX.on({
-    keyup: function (e) {
-        bind_events(this, e);
-    },
-
-    "enterKey": function () {
-        enter_category($(this), EV_ADD_CATEGORY, [
-            {
-                cat_list: CATEGORY_LIST_ADD,
-                trigger_obj: undefined,
-                next_trig: undefined
-            }
-        ])
-    },
-
-    "addCategory": function (e, data) {
-        add_category(this, e, data);
+    "addCategory": function () {
+        add_category(this, CATEGORY_LIST_ADD, {});
     }
+});
+
+CATEGORY_LIST_SEARCH.on({
+    "clearAll": function () {
+        $(this).html("");
+        BOOKMARK_LIST.trigger(EV_CLEAR_ALL);
+    }
+});
+
+CATEGORY_LIST_ADD.on({
+    "clearAll": function () {
+        $(this).html("");
+    }
+});
+
+//Actions for delete of Category - Search
+CATEGORY_LIST_SEARCH.on(EV_CLICK, CLASS_DEL_CATEGORY, function () {
+    delete_cat(this);
+    BOOKMARK_LIST.trigger(EV_UPDATE_BOOKMARKS);
+});
+
+//Actions for delete of Category - Add
+CATEGORY_LIST_ADD.on(EV_CLICK, CLASS_DEL_CATEGORY, function () {
+    delete_cat(this);
 });
 
 //Actions for bookmark List
@@ -189,13 +205,6 @@ BOOKMARK_LIST.on({
     }
 });
 
-//Actions for delete of categories
-$(document).on(EV_CLICK, CLASS_DEL_CATEGORY, function () {
-    var category_id = get_class_string(this, LEN_DEL_CATEGORY);
-    $(CLASS_CATEGORY + "." + category_id).remove();
-    BOOKMARK_LIST.trigger(EV_UPDATE_BOOKMARKS);
-});
-
 //Actions for Bookmark
 BOOKMARK_LIST.on(EV_CLICK, CLASS_BOOKMARK, function () {
     $.ajax({
@@ -209,5 +218,25 @@ ADD_BOOKMARKS.on({
     click: function () {
         TOP_WRAPPER.toggle();
         CATEGORY_INPUT.trigger(EV_CLEAR_ALL);
+        CATEGORY_LIST_SEARCH.trigger(EV_CLEAR_ALL);
+    }
+});
+
+//Action for BookMark Name - WIP
+BOOKMARK_NAME.on({
+    keyup: function (e) {
+        bind_events(this, e);
+    },
+
+    "enterKey": function () {
+        $.ajax({
+            url: URL_BOOKMARK_BY_NAME,
+            data: {'name': BOOKMARK_NAME.val()},
+            success: function (output) {
+                for (var category in output) {
+                    CATEGORY_BOX.trigger(EV_ADD_CATEGORY);
+                }
+            }
+        })
     }
 });

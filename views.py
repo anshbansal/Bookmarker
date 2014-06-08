@@ -44,6 +44,25 @@ class Autocomplete():
         return HttpResponse(data, 'application/json')
 
 
+class GetBookMarks:
+    @staticmethod
+    def get_bookmarks_by_categories(categories):
+        bookmarks = set()
+        for category in categories:
+            bookmarks.update(category.bookmark_set.all())
+        return bookmarks
+
+    @staticmethod
+    def get_bookmark_by_name(bookmark_name):
+        return BookMark.objects.filter(name=bookmark_name)[0]
+
+
+class GetCategories:
+    @staticmethod
+    def get_categories_by_bookmark(bookmark):
+        return bookmark.category.all()
+
+
 ###########################
 ##         Services      ##
 ###########################
@@ -63,12 +82,19 @@ def website_open(request):
 
 def get_bookmarks(request):
     categories = _get_objects_by_params(request, 'ids', Category)
-    bookmarks = set()
-    for category in categories:
-        bookmarks.update(category.bookmark_set.all())
+    bookmarks = GetBookMarks.get_bookmarks_by_categories(categories)
     return render(request, 'BookMarker/partials/bookmarks.html', {
         'bookmarks': bookmarks,
     })
+
+
+def get_bookmark_by_name(request):
+    bookmark = GetBookMarks.get_bookmark_by_name(request.GET.get("name", ""))
+    print("Aseem")
+    print(bookmark)
+    categories = GetCategories.get_categories_by_bookmark(bookmark)
+    result = [category.name for category in categories]
+    return HttpResponse(json.dumps(result), 'application/json')
 
 
 def get_category(request):
