@@ -16,19 +16,6 @@ var CLASS_UI_MENU_ITEM = ".ui-menu-item";
 var LEN_DEL_CATEGORY = "delete-cat ".length;
 var LEN_BOOK_CATEGORY = "col-md-12 bookmark ".length;
 
-//Variables for selectors
-var CATEGORY_INPUT = $("#category_inp");
-var CATEGORY_LIST_SEARCH = $("#category_list_search");
-
-var TOP_WRAPPER = $("#top-wrapper");
-
-var BOOKMARK_NAME = $("#bookmark-name");
-var CATEGORY_BOX = $("#category-box");
-var CATEGORY_LIST_ADD = $("#category_list_add");
-
-var ADD_BOOKMARKS = $("#add-bookmark");
-var BOOKMARK_LIST = $("#bookmarks-list");
-
 
 //TODO Auxiliary functions - START
 function valueInSelector(valueOf, selector) {
@@ -47,22 +34,51 @@ function getClassString(curObj, start) {
 
 //TODO Auxiliary functions - END
 //TODO Controller functions - START
-var EV_ENTER = "enter";
-var EV_ADD_CATEGORY = "addCategory";
-var EV_UPDATE_BOOKMARKS = "updateBookmarks";
-var EV_CLEAR_ALL = "clearAll";
+//Variables for Events
 var EV_CLICK = "click";
 
-function callClear(e, curObj, uniqueId) {
+//Variables for selectors
+var CATEGORY_INPUT = $("#category_inp");
+var CATEGORY_LIST_SEARCH = $("#category_list_search");
+var TOP_WRAPPER = $("#top-wrapper");
+var BOOKMARK_NAME = $("#bookmark-name");
+var CATEGORY_BOX = $("#category-box");
+var CATEGORY_LIST_ADD = $("#category_list_add");
+var ADD_BOOKMARKS = $("#add-bookmark");
+var BOOKMARK_LIST = $("#bookmarks-list");
+
+//Variables for selector Strings
+var strCategoryInput = 'CATEGORY_INPUT';
+var strCategoryListSearch = 'CATEGORY_LIST_SEARCH';
+var strTopWrapper = 'TOP_WRAPPER';
+var strBookmarkName = 'BOOKMARK_NAME';
+var strCategoryBox = 'CATEGORY_BOX';
+var strCategoryListAdd = 'CATEGORY_LIST_ADD';
+var strAddBookmarks = 'ADD_BOOKMARKS';
+var strBookmarkList = 'BOOKMARK_LIST';
+
+//Id Map
+var idMap = {};
+idMap[strCategoryInput] = CATEGORY_INPUT;
+idMap[strCategoryListSearch] = CATEGORY_LIST_SEARCH;
+idMap[strTopWrapper] = TOP_WRAPPER;
+idMap[strBookmarkName] = BOOKMARK_NAME;
+idMap[strCategoryBox] = CATEGORY_BOX;
+idMap[strCategoryListAdd] = CATEGORY_LIST_ADD;
+idMap[strAddBookmarks] = ADD_BOOKMARKS;
+idMap[strBookmarkList] = BOOKMARK_LIST;
+
+function callClear(e, uniqueId) {
+    var curObj = idMap[uniqueId];
     switch (uniqueId) {
-        case 'CATEGORY_INPUT':
-        case 'CATEGORY_BOX':
+        case strCategoryInput:
+        case strCategoryBox:
             curObj.val("");
             break;
-        case 'CATEGORY_LIST_SEARCH':
-            callClear(e, BOOKMARK_LIST, 'BOOKMARK_LIST', EV_CLEAR_ALL);
-        case 'CATEGORY_LIST_ADD':
-        case 'BOOKMARK_LIST':
+        case strCategoryListSearch:
+            callClear(e, strBookmarkList);
+        case strCategoryListAdd:
+        case strBookmarkList:
             curObj.html("");
             break;
         default:
@@ -70,9 +86,10 @@ function callClear(e, curObj, uniqueId) {
     }
 }
 
-function callUpdateBookList(e, curObj, uniqueId) {
+function callUpdateBookList(e, uniqueId) {
+    var curObj = idMap[uniqueId];
     switch (uniqueId) {
-        case 'BOOKMARK_LIST':
+        case strBookmarkList:
             $.ajax({
                 url: URL_BOOKMARK_LIST,
                 data: {'ids': getAllCategories()},
@@ -86,12 +103,13 @@ function callUpdateBookList(e, curObj, uniqueId) {
     }
 }
 
-function callEnterEvent(e, curObj, uniqueId) {
+function callEnterEvent(e, uniqueId) {
+    var curObj = idMap[uniqueId];
     switch (uniqueId) {
-        case 'CATEGORY_INPUT':
-        case 'CATEGORY_BOX':
+        case strCategoryInput:
+        case strCategoryBox:
             if (testCategory(curObj)) {
-                callAddCategory(e, curObj, uniqueId);
+                callAddCategory(e,  uniqueId);
             }
             break;
         default:
@@ -99,16 +117,16 @@ function callEnterEvent(e, curObj, uniqueId) {
     }
 }
 
-function callAddCategory(e, curObj, uniqueId) {
+function callAddCategory(e, uniqueId) {
+    var curObj = idMap[uniqueId];
     switch (uniqueId) {
-        case 'CATEGORY_INPUT':
+        case strCategoryInput:
             addCategory(e, curObj, {
                 cat_list: CATEGORY_LIST_SEARCH,
-                event_sel: BOOKMARK_LIST,
-                event_id: 'BOOKMARK_LIST'
+                event_id: strBookmarkList
             });
             break;
-        case 'CATEGORY_BOX':
+        case strCategoryBox:
             addCategory(e, curObj, {
                 cat_list: CATEGORY_LIST_ADD
             });
@@ -118,12 +136,13 @@ function callAddCategory(e, curObj, uniqueId) {
     }
 }
 
-function bindEvents(e, curObj, uniqueId) {
+function bindEvents(e, uniqueId) {
     if (e.keyCode == 13) {
-        callEnterEvent(e, curObj, uniqueId);
+        callEnterEvent(e, uniqueId);
     } else if (e.altKey && e.keyCode == "N".charCodeAt(0)) {
     }
 }
+
 //TODO Controller functions - END
 //TODO Body Load - START
 $(function () {
@@ -177,7 +196,7 @@ function addCategory(e, curObj, data) {
             data.cat_list.append(output);
             $(curObj).val("");
             if (data.event_id !== undefined) {
-                callUpdateBookList(e, data.event_sel, data.event_id);
+                callUpdateBookList(e,  data.event_id);
             }
         }
     });
@@ -191,20 +210,20 @@ function deleteCategory(curObj) {
 
 CATEGORY_INPUT.on({
     keyup: function (e) {
-        bindEvents(e, $(this), 'CATEGORY_INPUT');
+        bindEvents(e, strCategoryInput);
     }
 });
 
 CATEGORY_BOX.on({
     keyup: function (e) {
-        bindEvents(e, $(this), 'CATEGORY_BOX');
+        bindEvents(e, strCategoryBox);
     }
 });
 
 //Actions for delete of Category - Search
 CATEGORY_LIST_SEARCH.on(EV_CLICK, CLASS_DEL_CATEGORY, function (e) {
     deleteCategory(this);
-    callUpdateBookList(e, BOOKMARK_LIST, 'BOOKMARK_LIST')
+    callUpdateBookList(e,  strBookmarkList)
 });
 
 //Actions for delete of Category - Add
@@ -224,15 +243,15 @@ BOOKMARK_LIST.on(EV_CLICK, CLASS_BOOKMARK, function () {
 ADD_BOOKMARKS.on({
     click: function (e) {
         TOP_WRAPPER.toggle();
-        callClear(e, CATEGORY_INPUT, 'CATEGORY_INPUT');
-        callClear(e, CATEGORY_LIST_SEARCH, 'CATEGORY_LIST_SEARCH');
+        callClear(e,  strCategoryInput);
+        callClear(e, strCategoryListSearch);
     }
 });
 
-//Action for BookMark Name - WIP
+//TODO Action for BookMark Name
 BOOKMARK_NAME.on({
     keyup: function (e) {
-        bindEvents(e, $(this), 'BOOKMARK_NAME');
+        bindEvents(e, strBookmarkName);
     },
 
     "enterKey": function () {
@@ -240,9 +259,7 @@ BOOKMARK_NAME.on({
             url: URL_BOOKMARK_BY_NAME,
             data: {'name': BOOKMARK_NAME.val()},
             success: function (output) {
-                for (var category in output) {
-                    CATEGORY_BOX.trigger(EV_ADD_CATEGORY);
-                }
+                //TODO
             }
         })
     }
