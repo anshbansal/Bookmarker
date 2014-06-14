@@ -16,6 +16,7 @@ var CLASS_UI_MENU_ITEM = ".ui-menu-item";
 var LEN_DEL_CATEGORY = "delete-cat ".length;
 var LEN_BOOK_CATEGORY = "col-md-12 bookmark ".length;
 
+//Auxiliary Functions
 function valueInSelector(valueOf, selector) {
     var result = false;
     $(selector).each(function () {
@@ -57,38 +58,41 @@ var ADD_BOOKMARKS = initSelector("#add-bookmark", strAddBookmarks);
 var BOOKMARK_LIST = initSelector("#bookmarks-list", strBookmarkList);
 
 //Controller functions - START
-function callClear(curObj) {
-    switch (curObj.attr("customId")) {
+function eventClear(curObj) {
+    var customId = curObj.attr("customId");
+    switch (customId) {
         case strCategoryInput:
         case strCategoryBox:
             curObj.val("");
             break;
         case strCategoryListSearch:
-            callClear(BOOKMARK_LIST);
+            eventClear(BOOKMARK_LIST);
         case strCategoryListAdd:
         case strBookmarkList:
             curObj.html("");
             break;
         default:
-            alert("callClear NONE");
+            alert("eventClear for " + customId + " Not Bound");
     }
 }
 
-function callEnterEvent(e, curObj) {
-    switch (curObj.attr("customId")) {
+function eventEnter(e, curObj) {
+    var customId = curObj.attr("customId");
+    switch (customId) {
         case strCategoryInput:
         case strCategoryBox:
             if (testCategory(curObj)) {
-                callAddCategory(curObj);
+                eventAddCategory(curObj);
             }
             break;
         default:
-            alert("callEnterEvent NONE");
+            alert("eventEnter for " + customId + " Not Bound");
     }
 }
 
-function callAddCategory(curObj) {
-    switch (curObj.attr("customId")) {
+function eventAddCategory(curObj) {
+    var customId = curObj.attr("customId");
+    switch (customId) {
         case strCategoryInput:
             addCategory(curObj, CATEGORY_LIST_SEARCH, updateBookmarks);
             break;
@@ -96,26 +100,27 @@ function callAddCategory(curObj) {
             addCategory(curObj, CATEGORY_LIST_ADD, null);
             break;
         default:
-            alert("callAddCategory NONE");
+            alert("eventAddCategory for " + customId + " Not Bound");
     }
 }
 
-function callClickEvent(e, curObj) {
-    switch (curObj.attr("customId")) {
+function eventClick(e, curObj) {
+    var customId = curObj.attr("customId");
+    switch (customId) {
         case strAddBookmarks:
             bindEvents(e, ADD_BOOKMARKS);
             TOP_WRAPPER.toggle();
-            callClear(CATEGORY_INPUT);
-            callClear(CATEGORY_LIST_SEARCH);
+            eventClear(CATEGORY_INPUT);
+            eventClear(CATEGORY_LIST_SEARCH);
             break;
         default:
-            alert("Not bound");
+            alert("eventClick for " + customId + " Not Bound");
     }
 }
 
 function bindEvents(e, curObj) {
     if (e.keyCode == 13) {
-        callEnterEvent(e, curObj);
+        eventEnter(e, curObj);
     } else if (e.altKey && e.keyCode == "N".charCodeAt(0)) {
     }
 }
@@ -200,10 +205,11 @@ $("#category_inp,#category-box,#bookmark-name,#add-bookmark").on("keyup", functi
 );
 
 $("#add-bookmark").on("click", function (e) {
-        callClickEvent(e, $(this));
+        eventClick(e, $(this));
     }
 );
 
+//TODO Find a way to refactor this event delegation properly
 //Actions for delete of Category - Search
 CATEGORY_LIST_SEARCH.on("click", CLASS_DEL_CATEGORY, function (e) {
     deleteCategory(this);
@@ -211,12 +217,12 @@ CATEGORY_LIST_SEARCH.on("click", CLASS_DEL_CATEGORY, function (e) {
 });
 
 //Actions for delete of Category - Add
-CATEGORY_LIST_ADD.on("click", CLASS_DEL_CATEGORY, function () {
+CATEGORY_LIST_ADD.on("click", CLASS_DEL_CATEGORY, function (e) {
     deleteCategory(this);
 });
 
 //Actions for Bookmark
-BOOKMARK_LIST.on("click", CLASS_BOOKMARK, function () {
+BOOKMARK_LIST.on("click", CLASS_BOOKMARK, function (e) {
     $.ajax({
         url: URL_PAGE_OPEN,
         data: {'id': getClassString(this, LEN_BOOK_CATEGORY)}
