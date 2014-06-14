@@ -16,7 +16,6 @@ var CLASS_UI_MENU_ITEM = ".ui-menu-item";
 var LEN_DEL_CATEGORY = "delete-cat ".length;
 var LEN_BOOK_CATEGORY = "col-md-12 bookmark ".length;
 
-//TODO Auxiliary functions - START
 function valueInSelector(valueOf, selector) {
     var result = false;
     $(selector).each(function () {
@@ -36,8 +35,7 @@ function initSelector(uniqueId, customId) {
     selector.attr('customId', customId);
     return selector;
 }
-//TODO Auxiliary functions - END
-//TODO Controller functions - START
+
 //Variables for Events
 var EV_CLICK = "click";
 
@@ -61,6 +59,7 @@ var CATEGORY_LIST_ADD = initSelector("#category_list_add", strCategoryBox);
 var ADD_BOOKMARKS = initSelector("#add-bookmark", strAddBookmarks);
 var BOOKMARK_LIST = initSelector("#bookmarks-list", strBookmarkList);
 
+//Controller functions - START
 function callClear(e, curObj) {
     switch (curObj.attr("customId")) {
         case strCategoryInput:
@@ -75,22 +74,6 @@ function callClear(e, curObj) {
             break;
         default:
             alert("callClear NONE");
-    }
-}
-
-function callUpdateBookList(e, curObj) {
-    switch (curObj.attr("customId")) {
-        case strBookmarkList:
-            $.ajax({
-                url: URL_BOOKMARK_LIST,
-                data: {'ids': getAllCategories()},
-                success: function (output) {
-                    curObj.html(output);
-                }
-            });
-            break;
-        default:
-            alert("callUpdateBookList NONE");
     }
 }
 
@@ -110,15 +93,10 @@ function callEnterEvent(e, curObj) {
 function callAddCategory(e, curObj) {
     switch (curObj.attr("customId")) {
         case strCategoryInput:
-            addCategory(e, curObj, {
-                cat_list: CATEGORY_LIST_SEARCH,
-                event_sel: BOOKMARK_LIST
-            });
+            addCategory(e, curObj, CATEGORY_LIST_SEARCH, updateBookmarks);
             break;
         case strCategoryBox:
-            addCategory(e, curObj, {
-                cat_list: CATEGORY_LIST_ADD
-            });
+            addCategory(e, curObj, CATEGORY_LIST_ADD, null);
             break;
         default:
             alert("callAddCategory NONE");
@@ -132,8 +110,6 @@ function bindEvents(e, curObj) {
     }
 }
 
-//TODO Controller functions - END
-//TODO Body Load - START
 $(function () {
     TOP_WRAPPER.hide();
 
@@ -155,8 +131,8 @@ $(function () {
         source: URL_BOOKMARK_AUTO
     });
 });
-//TODO Body Load - END
-//TODO Auxiliary functions for categories - START
+
+//Auxiliary functions for Categories - START
 function getAllCategories() {
     var classIds = [];
     $(CLASS_DEL_CATEGORY).each(function () {
@@ -177,15 +153,15 @@ function testCategory(categoryInp) {
     return false;
 }
 
-function addCategory(e, curObj, data) {
+function addCategory(e, curObj, list_update, func) {
     $.ajax({
         url: URL_CATEGORY,
         data: {'value': $(curObj).val()},
         success: function (output) {
-            data.cat_list.append(output);
+            list_update.append(output);
             $(curObj).val("");
-            if (data.event_sel !== undefined) {
-                callUpdateBookList(e, data.event_sel);
+            if (func !== null){
+                func();
             }
         }
     });
@@ -195,18 +171,28 @@ function deleteCategory(curObj) {
     var categoryId = getClassString(curObj, LEN_DEL_CATEGORY);
     $(CLASS_CATEGORY + "." + categoryId).remove();
 }
-//TODO Auxiliary functions for categories - END
+
+//Auxiliary functions for Bookmarks
+function updateBookmarks() {
+    $.ajax({
+        url: URL_BOOKMARK_LIST,
+        data: {'ids': getAllCategories()},
+        success: function (output) {
+            BOOKMARK_LIST.html(output);
+        }
+    });
+}
 
 $("#category_inp,#category-box,#bookmark-name").on({
-    keyup: function (e) {
-        bindEvents(e, $(this));
-    }}
+        keyup: function (e) {
+            bindEvents(e, $(this));
+        }}
 );
 
 //Actions for delete of Category - Search
 CATEGORY_LIST_SEARCH.on(EV_CLICK, CLASS_DEL_CATEGORY, function (e) {
     deleteCategory(this);
-    callUpdateBookList(e, BOOKMARK_LIST)
+    updateBookmarks();
 });
 
 //Actions for delete of Category - Add
