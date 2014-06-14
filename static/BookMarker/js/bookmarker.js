@@ -36,9 +36,6 @@ function initSelector(uniqueId, customId) {
     return selector;
 }
 
-//Variables for Events
-var EV_CLICK = "click";
-
 //Variables for selector Strings
 var strCategoryInput = 'CATEGORY_INPUT';
 var strCategoryListSearch = 'CATEGORY_LIST_SEARCH';
@@ -103,6 +100,19 @@ function callAddCategory(e, curObj) {
     }
 }
 
+function callClickEvent(e, curObj) {
+    switch (curObj.attr("customId")) {
+        case strAddBookmarks:
+            bindEvents(e, ADD_BOOKMARKS);
+            TOP_WRAPPER.toggle();
+            callClear(e, CATEGORY_INPUT);
+            callClear(e, CATEGORY_LIST_SEARCH);
+            break;
+        default:
+            alert("Not bound");
+    }
+}
+
 function bindEvents(e, curObj) {
     if (e.keyCode == 13) {
         callEnterEvent(e, curObj);
@@ -160,7 +170,7 @@ function addCategory(e, curObj, list_update, func) {
         success: function (output) {
             list_update.append(output);
             $(curObj).val("");
-            if (func !== null){
+            if (func !== null) {
                 func();
             }
         }
@@ -183,37 +193,32 @@ function updateBookmarks() {
     });
 }
 
-$("#category_inp,#category-box,#bookmark-name").on({
-        keyup: function (e) {
-            bindEvents(e, $(this));
-        }}
+//jQuery for binding events and delegating events START
+$("#category_inp,#category-box,#bookmark-name,#add-bookmark").on("keyup", function (e) {
+        bindEvents(e, $(this));
+    }
+);
+
+$("#add-bookmark").on("click", function (e) {
+        callClickEvent(e, $(this));
+    }
 );
 
 //Actions for delete of Category - Search
-CATEGORY_LIST_SEARCH.on(EV_CLICK, CLASS_DEL_CATEGORY, function (e) {
+CATEGORY_LIST_SEARCH.on("click", CLASS_DEL_CATEGORY, function (e) {
     deleteCategory(this);
     updateBookmarks();
 });
 
 //Actions for delete of Category - Add
-CATEGORY_LIST_ADD.on(EV_CLICK, CLASS_DEL_CATEGORY, function () {
+CATEGORY_LIST_ADD.on("click", CLASS_DEL_CATEGORY, function () {
     deleteCategory(this);
 });
 
 //Actions for Bookmark
-BOOKMARK_LIST.on(EV_CLICK, CLASS_BOOKMARK, function () {
+BOOKMARK_LIST.on("click", CLASS_BOOKMARK, function () {
     $.ajax({
         url: URL_PAGE_OPEN,
         data: {'id': getClassString(this, LEN_BOOK_CATEGORY)}
     });
 });
-
-//Actions for Show/Hide Bookmark addition screen
-ADD_BOOKMARKS.on(
-    'click', function (e) {
-        bindEvents(e, ADD_BOOKMARKS);
-        TOP_WRAPPER.toggle();
-        callClear(e, CATEGORY_INPUT);
-        callClear(e, CATEGORY_LIST_SEARCH);
-    }
-);
