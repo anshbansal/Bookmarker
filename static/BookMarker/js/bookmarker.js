@@ -18,22 +18,19 @@ var LEN_BOOK_CATEGORY = "col-md-12 bookmark ".length;
 
 //Variables for selectors
 var CATEGORY_INPUT = $("#category_inp");
-var BOOKMARK_LIST = $("#bookmarks-list");
 var CATEGORY_LIST_SEARCH = $("#category_list_search");
-var CATEGORY_LIST_ADD = $("#category_list_add");
+
+var TOP_WRAPPER = $("#top-wrapper");
+
 var BOOKMARK_NAME = $("#bookmark-name");
 var CATEGORY_BOX = $("#category-box");
-var TOP_WRAPPER = $("#top-wrapper");
+var CATEGORY_LIST_ADD = $("#category_list_add");
+
 var ADD_BOOKMARKS = $("#add-bookmark");
-
-//Variables for event names
-var EV_ADD_CATEGORY = "addCategory";
-var EV_CLICK = "click";
-var EV_UPDATE_BOOKMARKS = "updateBookmarks";
-var EV_CLEAR_ALL = "clearAll";
+var BOOKMARK_LIST = $("#bookmarks-list");
 
 
-//Auxiliary functions
+//TODO Auxiliary functions - START
 function valueInSelector(valueOf, selector) {
     var result = false;
     $(selector).each(function () {
@@ -48,17 +45,87 @@ function getClassString(curObj, start) {
     return $(curObj).attr('class').substr(start);
 }
 
-function bindEvents(curObj, e) {
-    var triggerName = "";
-    if (e.keyCode == 13) {
-        triggerName = "enterKey";
-    } else if (e.altKey && e.keyCode == "N".charCodeAt(0)) {
-        triggerName = "clickAltN";
+//TODO Auxiliary functions - END
+//TODO Controller functions - START
+var EV_ENTER = "enter";
+var EV_ADD_CATEGORY = "addCategory";
+var EV_UPDATE_BOOKMARKS = "updateBookmarks";
+var EV_CLEAR_ALL = "clearAll";
+var EV_CLICK = "click";
+
+function callClear(e, curObj, uniqueId) {
+    switch (uniqueId) {
+        case 'CATEGORY_INPUT':
+        case 'CATEGORY_BOX':
+            curObj.val("");
+            break;
+        case 'CATEGORY_LIST_SEARCH':
+            callClear(e, BOOKMARK_LIST, 'BOOKMARK_LIST', EV_CLEAR_ALL);
+        case 'CATEGORY_LIST_ADD':
+        case 'BOOKMARK_LIST':
+            curObj.html("");
+            break;
+        default:
+            alert("callClear NONE");
     }
-    $(curObj).trigger(triggerName);
 }
 
-//Action for body Load
+function callUpdateBookList(e, curObj, uniqueId) {
+    switch (uniqueId) {
+        case 'BOOKMARK_LIST':
+            $.ajax({
+                url: URL_BOOKMARK_LIST,
+                data: {'ids': getAllCategories()},
+                success: function (output) {
+                    curObj.html(output);
+                }
+            });
+            break;
+        default:
+            alert("callUpdateBookList NONE");
+    }
+}
+
+function callEnterEvent(e, curObj, uniqueId) {
+    switch (uniqueId) {
+        case 'CATEGORY_INPUT':
+        case 'CATEGORY_BOX':
+            if (testCategory(curObj)) {
+                callAddCategory(e, curObj, uniqueId);
+            }
+            break;
+        default:
+            alert("callEnterEvent NONE");
+    }
+}
+
+function callAddCategory(e, curObj, uniqueId) {
+    switch (uniqueId) {
+        case 'CATEGORY_INPUT':
+            addCategory(e, curObj, {
+                cat_list: CATEGORY_LIST_SEARCH,
+                event_sel: BOOKMARK_LIST,
+                event_id: 'BOOKMARK_LIST'
+            });
+            break;
+        case 'CATEGORY_BOX':
+            addCategory(e, curObj, {
+                cat_list: CATEGORY_LIST_ADD
+            });
+            break;
+        default:
+            alert("callAddCategory NONE");
+    }
+}
+
+function bindEvents(e, curObj, uniqueId) {
+    if (e.keyCode == 13) {
+        callEnterEvent(e, curObj, uniqueId);
+    } else if (e.altKey && e.keyCode == "N".charCodeAt(0)) {
+    }
+}
+//TODO Controller functions - END
+//TODO Body Load - START
 $(function () {
     TOP_WRAPPER.toggle();
 
@@ -80,8 +147,8 @@ $(function () {
         source: URL_BOOKMARK_AUTO
     });
 });
-
-//Auxiliary functions for categories
+//TODO Body Load - END
+//TODO Auxiliary functions for categories - START
 function getAllCategories() {
     var classIds = [];
     $(CLASS_DEL_CATEGORY).each(function () {
@@ -102,15 +169,15 @@ function testCategory(categoryInp) {
     return false;
 }
 
-function addCategory(curObj, categoryList, triggerData) {
+function addCategory(e, curObj, data) {
     $.ajax({
         url: URL_CATEGORY,
         data: {'value': $(curObj).val()},
         success: function (output) {
-            categoryList.append(output);
+            data.cat_list.append(output);
             $(curObj).val("");
-            if (triggerData.trigger_obj !== undefined) {
-                triggerData.trigger_obj.trigger(triggerData.next_trig);
+            if (data.event_id !== undefined) {
+                callUpdateBookList(e, data.event_sel, data.event_id);
             }
         }
     });
@@ -120,79 +187,29 @@ function deleteCategory(curObj) {
     var categoryId = getClassString(curObj, LEN_DEL_CATEGORY);
     $(CLASS_CATEGORY + "." + categoryId).remove();
 }
+//TODO Auxiliary functions for categories - END
 
-//Actions common to both category boxes
-$("#category_inp,#category-box").on({
-    keyup: function (e) {
-        bindEvents(this, e);
-    },
-    "enterKey": function () {
-        if (testCategory($(this))) {
-            $(this).trigger(EV_ADD_CATEGORY);
-        }
-    },
-    "clearAll": function () {
-        $(this).val("");
-
-    }
-});
-
-//Actions for Search's category box
 CATEGORY_INPUT.on({
-    "addCategory": function () {
-        addCategory(this, CATEGORY_LIST_SEARCH, {
-            trigger_obj: BOOKMARK_LIST,
-            next_trig: EV_UPDATE_BOOKMARKS
-        });
+    keyup: function (e) {
+        bindEvents(e, $(this), 'CATEGORY_INPUT');
     }
 });
 
-//Actions for Add Bookmark's category box
 CATEGORY_BOX.on({
-    "addCategory": function () {
-        addCategory(this, CATEGORY_LIST_ADD, {});
-    }
-});
-
-CATEGORY_LIST_SEARCH.on({
-    "clearAll": function () {
-        $(this).html("");
-        BOOKMARK_LIST.trigger(EV_CLEAR_ALL);
-    }
-});
-
-CATEGORY_LIST_ADD.on({
-    "clearAll": function () {
-        $(this).html("");
+    keyup: function (e) {
+        bindEvents(e, $(this), 'CATEGORY_BOX');
     }
 });
 
 //Actions for delete of Category - Search
-CATEGORY_LIST_SEARCH.on(EV_CLICK, CLASS_DEL_CATEGORY, function () {
+CATEGORY_LIST_SEARCH.on(EV_CLICK, CLASS_DEL_CATEGORY, function (e) {
     deleteCategory(this);
-    BOOKMARK_LIST.trigger(EV_UPDATE_BOOKMARKS);
+    callUpdateBookList(e, BOOKMARK_LIST, 'BOOKMARK_LIST')
 });
 
 //Actions for delete of Category - Add
 CATEGORY_LIST_ADD.on(EV_CLICK, CLASS_DEL_CATEGORY, function () {
     deleteCategory(this);
-});
-
-//Actions for bookmark List
-BOOKMARK_LIST.on({
-    "updateBookmarks": function () {
-        $.ajax({
-            url: URL_BOOKMARK_LIST,
-            data: {'ids': getAllCategories()},
-            success: function (output) {
-                BOOKMARK_LIST.html(output);
-            }
-        });
-    },
-
-    "clearAll": function () {
-        $(this).html("");
-    }
 });
 
 //Actions for Bookmark
@@ -205,17 +222,17 @@ BOOKMARK_LIST.on(EV_CLICK, CLASS_BOOKMARK, function () {
 
 //Actions for Show/Hide Bookmark addition screen
 ADD_BOOKMARKS.on({
-    click: function () {
+    click: function (e) {
         TOP_WRAPPER.toggle();
-        CATEGORY_INPUT.trigger(EV_CLEAR_ALL);
-        CATEGORY_LIST_SEARCH.trigger(EV_CLEAR_ALL);
+        callClear(e, CATEGORY_INPUT, 'CATEGORY_INPUT');
+        callClear(e, CATEGORY_LIST_SEARCH, 'CATEGORY_LIST_SEARCH');
     }
 });
 
 //Action for BookMark Name - WIP
 BOOKMARK_NAME.on({
     keyup: function (e) {
-        bindEvents(this, e);
+        bindEvents(e, $(this), 'BOOKMARK_NAME');
     },
 
     "enterKey": function () {
