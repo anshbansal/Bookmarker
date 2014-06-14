@@ -57,14 +57,14 @@ var ADD_BOOKMARKS = initSelector("#add-bookmark", strAddBookmarks);
 var BOOKMARK_LIST = initSelector("#bookmarks-list", strBookmarkList);
 
 //Controller functions - START
-function callClear(e, curObj) {
+function callClear(curObj) {
     switch (curObj.attr("customId")) {
         case strCategoryInput:
         case strCategoryBox:
             curObj.val("");
             break;
         case strCategoryListSearch:
-            callClear(e, BOOKMARK_LIST);
+            callClear(BOOKMARK_LIST);
         case strCategoryListAdd:
         case strBookmarkList:
             curObj.html("");
@@ -79,7 +79,7 @@ function callEnterEvent(e, curObj) {
         case strCategoryInput:
         case strCategoryBox:
             if (testCategory(curObj)) {
-                callAddCategory(e, curObj);
+                callAddCategory(curObj);
             }
             break;
         default:
@@ -87,13 +87,13 @@ function callEnterEvent(e, curObj) {
     }
 }
 
-function callAddCategory(e, curObj) {
+function callAddCategory(curObj) {
     switch (curObj.attr("customId")) {
         case strCategoryInput:
-            addCategory(e, curObj, CATEGORY_LIST_SEARCH, updateBookmarks);
+            addCategory(curObj, CATEGORY_LIST_SEARCH, updateBookmarks);
             break;
         case strCategoryBox:
-            addCategory(e, curObj, CATEGORY_LIST_ADD, null);
+            addCategory(curObj, CATEGORY_LIST_ADD, null);
             break;
         default:
             alert("callAddCategory NONE");
@@ -105,8 +105,8 @@ function callClickEvent(e, curObj) {
         case strAddBookmarks:
             bindEvents(e, ADD_BOOKMARKS);
             TOP_WRAPPER.toggle();
-            callClear(e, CATEGORY_INPUT);
-            callClear(e, CATEGORY_LIST_SEARCH);
+            callClear(CATEGORY_INPUT);
+            callClear(CATEGORY_LIST_SEARCH);
             break;
         default:
             alert("Not bound");
@@ -163,7 +163,7 @@ function testCategory(categoryInp) {
     return false;
 }
 
-function addCategory(e, curObj, list_update, func) {
+function addCategory(curObj, list_update, func) {
     $.ajax({
         url: URL_CATEGORY,
         data: {'value': $(curObj).val()},
