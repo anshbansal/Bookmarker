@@ -1,13 +1,18 @@
 ;
 function BookmarkList(eventBus, sel) {
-    this.eventBus = eventBus.subscribe(this);
+    this.eventBus = eventBus;
     this.sel = sel;
 }
 
 BookmarkList.prototype = {
     constructor: BookmarkList,
-    notify: function (event) {
+
+    notify: function (eventName) {
+        switch (eventName) {
+
+        }
     },
+
     clear: function () {
         this.sel.html("");
     }
