@@ -7,20 +7,27 @@ BookmarkList.prototype = {
     constructor: BookmarkList,
 
     notify: function (eventName, scope) {
-        var _this = this;
         switch (eventName) {
             case BookmarkerEvent.CategoryAddedOnPage:
-                if (this.categoryList.scope == scope) {
-                    BookmarkRepo.ListByCategory(this.categoryList.getAllCategories())
-                        .success(function (output) {
-                            _this.sel.html(output);
-                        });
-                }
+            case BookmarkerEvent.CategoryDeletedOnPage:
+                this.isCurrentList(scope) && this.updateBookmarks();
                 break;
         }
     },
 
     clear: function () {
         this.sel.html("");
+    },
+
+    isCurrentList: function (scope) {
+        return this.categoryList.scope == scope;
+    },
+
+    updateBookmarks: function () {
+        var sel = this.sel;
+        BookmarkRepo.ListByCategory(this.categoryList.getAllCategories())
+            .success(function (output) {
+                sel.html(output);
+            });
     }
 };

@@ -21,13 +21,13 @@ CategoryInput.prototype = {
 
     enterKey: function (e) {
         var _this = this;
-        if (this.testCategory()) {
-            CategoryRepo.DetailByName(this.getVal())
-                .success(function (output) {
-                    _this.categoryList.addCategory(output);
-                    _this.clear();
-                });
+        if (!this.categoryList.testCategory(this)) {
+            return;
         }
+        CategoryRepo.DetailByName(this.getVal()).success(function (output) {
+            _this.categoryList.addCategory(output);
+            _this.clear();
+        });
     },
 
     getVal: function () {
@@ -36,18 +36,6 @@ CategoryInput.prototype = {
 
     clear: function () {
         this.sel.val("");
-    },
-
-    testCategory: function () {
-        if (! objValueInClass(this, ".ui-menu-item", false)) {
-            alert("Not a category");
-        } else if (objValueInClass(this, ".category", true)) {
-            alert("Category already added");
-            this.clear();
-        } else {
-            return true;
-        }
-        return false;
     }
 };
 
@@ -61,7 +49,13 @@ CategoryList.prototype = {
     constructor: CategoryList,
 
     addCategory: function (category) {
+        var _this = this;
         this.sel.append(category);
+        $(this.deleteString).click(function () {
+            //TODO Refactor logic for deletion of category
+            $(this).closest(".category").remove();
+            _this.eventBus.publish(BookmarkerEvent.CategoryDeletedOnPage, _this.scope);
+        });
         this.eventBus.publish(BookmarkerEvent.CategoryAddedOnPage, this.scope);
     },
 
@@ -71,5 +65,18 @@ CategoryList.prototype = {
 
     getAllCategories: function () {
         return getIdsOfChildren(this.sel, this.deleteString);
+    },
+
+    testCategory: function (valueSel) {
+        var value = valueSel.getVal();
+        if (objValueInClass(value, this, ".category", true)) {
+            alert("Category already added");
+            valueSel.clear();
+        } else if (!objValueInClass(value, this, ".ui-menu-item", false)) {
+            alert("Not a category");
+        } else {
+            return true;
+        }
+        return false;
     }
 };

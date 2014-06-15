@@ -8,6 +8,7 @@ function BookmarkerEvent() {
 }
 BookmarkerEvent.ToggleTopBar = "topBar:toggle";
 BookmarkerEvent.CategoryAddedOnPage = "category:added";
+BookmarkerEvent.CategoryDeletedOnPage = "category:deleted";
 
 $(function () {
     eventBus = new BookmarkerEventBus();
@@ -23,6 +24,7 @@ $(function () {
     var subObj = {};
     subObj[BookmarkerEvent.ToggleTopBar] = [topSection];
     subObj[BookmarkerEvent.CategoryAddedOnPage] = [bookmarkList];
+    subObj[BookmarkerEvent.CategoryDeletedOnPage] = [bookmarkList];
     eventBus.subscribe(subObj);
 
     eventBus.publish(BookmarkerEvent.ToggleTopBar, '');

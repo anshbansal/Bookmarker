@@ -5,13 +5,14 @@ function Common(eventBus, scope, sel) {
     this.sel = sel;
 }
 
-function objValueInClass(curObj, classString, classIsChild) {
+function objValueInClass(value, curObj, classString, classIsChild) {
     var result = false;
     var iter = classIsChild ? curObj.sel.find(classString) : $(classString);
 
     iter.each(function () {
-        if (curObj.getVal() == $.trim($(this).text())) {
+        if (value == $.trim($(this).text())) {
             result = true;
+            return;
         }
     });
     return result;
@@ -20,7 +21,11 @@ function objValueInClass(curObj, classString, classIsChild) {
 function getIdsOfChildren(sel, classString) {
     var ids = [];
     sel.find(classString).each(function () {
-        ids.push($(this).attr('class').substr(classString.length));
+        ids.push(getClassNames(this, classString.length));
     });
     return ids.join(',');
+}
+
+function getClassNames(curObj, start) {
+    return $(curObj).attr('class').substr(start);
 }
