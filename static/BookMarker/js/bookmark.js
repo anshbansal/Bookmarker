@@ -28,6 +28,9 @@ BookmarkList.prototype = {
         BookmarkRepo.ListByCategory(this.categoryList.getAllCategories())
             .success(function (output) {
                 sel.html(output);
+                $('.bookmark').click(function () {
+                    BookmarkRepo.OpenPage(this);
+                });
             });
     }
 };

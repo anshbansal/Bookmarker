@@ -26,3 +26,10 @@ BookmarkRepo.ListByCategory = function (categoryIds) {
         data: {'ids': categoryIds}
     });
 };
+
+BookmarkRepo.OpenPage = function (sel) {
+    return $.ajax({
+        url: "open/",
+        data: {'id': getClassNames(sel, "col-md-12 bookmark ".length)}
+    });
+};
