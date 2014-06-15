@@ -1,29 +1,33 @@
 var eventBus;
 var topSection;
 var categoryInpSearch;
-var categoryListSearch;
 var categoryInpAdd;
-var categoryListAdd;
 var bookmarkList;
 
 function BookmarkerEvent() {
 }
-BookmarkerEvent.ToggleVisibility = "ToggleVisibility";
+BookmarkerEvent.ToggleTopBar = "topBar:toggle";
+BookmarkerEvent.CategoryAddedOnPage = "category:added";
 
 $(function () {
     eventBus = new BookmarkerEventBus();
+    topSection = new TopSection(eventBus, 'topBar', $("#top-wrapper"));
 
-    topSection = new TopSection(eventBus, $("#top-wrapper"));
-    eventBus.subscribe(topSection,
-        [BookmarkerEvent.ToggleVisibility]
-    );
-    eventBus.publish(BookmarkerEvent.ToggleVisibility);
+    var categoryListSearch = new CategoryList(eventBus, 'sideBar', $("#category_list_search"));
+    categoryInpSearch = new CategoryInput(eventBus, 'sideBar', $("#category_inp"), categoryListSearch);
+    var categoryListAdd = new CategoryList(eventBus, 'topBar', $("#category_list_add"));
+    categoryInpAdd = new CategoryInput(eventBus, 'topBar', $("#category-box"), categoryListAdd);
 
-    categoryListSearch = new CategoryList(eventBus, $("#category_list_search"));
-    categoryInpSearch = new CategoryInput(eventBus, $("#category_inp"), categoryListSearch);
-    categoryListAdd = new CategoryList(eventBus, $("#category_list_add"));
-    categoryInpAdd = new CategoryInput(eventBus, $("#category-box"), categoryListAdd);
+    bookmarkList = new BookmarkList(eventBus, 'mainBody', $("#bookmarks-list"), categoryListSearch);
 
-    bookmarkList = new BookmarkList(eventBus, "#bookmarks-list");
-})
-;
+    var subObj = {};
+    subObj[BookmarkerEvent.ToggleTopBar] = [topSection];
+    subObj[BookmarkerEvent.CategoryAddedOnPage] = [bookmarkList];
+    eventBus.subscribe(subObj);
+
+    eventBus.publish(BookmarkerEvent.ToggleTopBar, '');
+});
+
+$("#add-bookmark").click(function () {
+    eventBus.publish(BookmarkerEvent.ToggleTopBar, '');
+});

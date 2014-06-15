@@ -1,4 +1,3 @@
-;
 function BookmarkerEventBus() {
     this.subscribers = {};
 }
@@ -6,23 +5,28 @@ function BookmarkerEventBus() {
 BookmarkerEventBus.prototype = {
     constructor: BookmarkerEventBus,
 
-    subscribe: function (elem, events) {
-        for (var i = 0; i < events.length; i++) {
-            this._addListener(this.subscribers[events[i]], elem);
+    subscribe: function (obj) {
+        var keys = Object.keys(obj);
+        for (var i = 0; i < keys.length; i++) {
+            var eventName = keys[i];
+            var subList = obj[eventName];
+            for (var j = 0; j < subList.length; j++) {
+                this._addListener(this.subscribers, eventName, subList[j]);
+            }
         }
     },
 
-    _addListener: function (subList, sub) {
-        if (!subList) {
-            subList = [];
+    _addListener: function (sel, eventName, elem) {
+        if (!sel[eventName]) {
+            sel[eventName] = [];
         }
-        subList.push(sub);
+        sel[eventName].push(elem);
     },
 
-    publish: function (eventName) {
+    publish: function (eventName, scope) {
         var subscribers = this.subscribers[eventName];
         for (var i = 0; i < subscribers.length; i++) {
-            subscribers[i].notify(eventName);
+            subscribers[i].notify(eventName, scope);
         }
     }
 };

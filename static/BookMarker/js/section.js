@@ -1,15 +1,15 @@
-;
-function TopSection(eventBus, sel) {
+function TopSection(eventBus, scope, sel) {
     this.eventBus = eventBus;
+    this.scope = scope;
     this.sel = sel;
 }
 
 TopSection.prototype = {
     constructor: TopSection,
 
-    notify: function (eventName) {
+    notify: function (eventName, scope) {
         switch (eventName) {
-            case BookmarkerEvent.ToggleVisibility:
+            case BookmarkerEvent.ToggleTopBar:
                 this.toggle();
                 break;
         }
