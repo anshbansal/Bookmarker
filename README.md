@@ -15,10 +15,16 @@ This is still very much in progress. Currently working on search page.
 ####Help wanted
 Anyone interested in helping to improve UI please start a issue.
 
-Credits
-=======
+Credits/Reviews/Discussions
+===========================
 These are the places that I looked at besides documentation and stackoverflow while building this. 
 - http://startbootstrap.com/simple-sidebar
 - http://www.jqueryautocomplete.com/jquery-autocomplete-json-example.html
-- http://stackoverflow.com/questions/15928466/refresh-a-div-to-shows-new-rating-in-django-using-jquery-and-ajax
 - http://learn.shayhowe.com/html-css
+- http://codereview.stackexchange.com/questions/52742/adding-deleting-elements-as-per-autocomplete-results-updated
+- http://codereview.stackexchange.com/questions/53896/personal-project-for-managing-my-bookmarks
+- http://codereview.stackexchange.com/questions/54306/personal-project-for-managing-my-bookmarks-v2
+- https://groups.google.com/forum/#!topic/django-users/L_dPAZSUKL0
+- https://groups.google.com/forum/#!topic/django-users/rSqSftkl5mg
+- https://groups.google.com/forum/#!topic/django-users/ob4fXz3GF9w
+- https://groups.google.com/forum/#!topic/django-users/q3TW3ZRNTHU
