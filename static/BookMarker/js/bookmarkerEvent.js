@@ -23,10 +23,13 @@ BookmarkerEventBus.prototype = {
         sel[eventName].push(elem);
     },
 
-    publish: function (eventName, scope) {
+    publish: function (eventName) {
         var subscribers = this.subscribers[eventName];
+        if (!subscribers) {
+            return;
+        }
         for (var i = 0; i < subscribers.length; i++) {
-            subscribers[i].notify(eventName, scope);
+            subscribers[i].notify(eventName);
         }
     }
 };

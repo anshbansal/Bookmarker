@@ -1,13 +1,11 @@
-function TopSection(eventBus, scope, sel) {
-    this.eventBus = eventBus;
-    this.scope = scope;
-    this.sel = sel;
+function TopSection(eventBus, sel) {
+    Common.call(this, eventBus, sel);
 }
 
 TopSection.prototype = {
     constructor: TopSection,
 
-    notify: function (eventName, scope) {
+    notify: function (eventName) {
         switch (eventName) {
             case BookmarkerEvent.ToggleTopBar:
                 this.toggle();

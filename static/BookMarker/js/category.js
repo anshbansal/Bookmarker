@@ -1,5 +1,5 @@
-function CategoryInput(eventBus, scope, sel, categoryList) {
-    Common.call(this, eventBus, scope, sel);
+function CategoryInput(eventBus, sel, categoryList) {
+    Common.call(this, eventBus, sel);
     this.categoryList = categoryList;
 
     var _this = this;
@@ -40,9 +40,10 @@ CategoryInput.prototype = {
 };
 
 
-function CategoryList(eventBus, scope, sel) {
-    Common.call(this, eventBus, scope, sel);
+function CategoryList(eventBus, sel, type) {
+    Common.call(this, eventBus, sel);
     this.deleteString = ".delete-cat";
+    this.type = type;
 }
 
 CategoryList.prototype = {
@@ -54,9 +55,9 @@ CategoryList.prototype = {
         $(this.deleteString).click(function () {
             //TODO Refactor logic for deletion of category
             $(this).closest(".category").remove();
-            _this.eventBus.publish(BookmarkerEvent.CategoryDeletedOnPage, _this.scope);
+            _this.eventBus.publish(CategoryList.getDeleteEvent(_this.type));
         });
-        this.eventBus.publish(BookmarkerEvent.CategoryAddedOnPage, this.scope);
+        this.eventBus.publish(CategoryList.getAddEvent(this.type));
     },
 
     clear: function () {
@@ -78,5 +79,23 @@ CategoryList.prototype = {
             return true;
         }
         return false;
+    }
+};
+
+CategoryList.getDeleteEvent = function (type) {
+    switch (type) {
+        case "search":
+            return BookmarkerEvent.CategorySearchDeletedOnPage;
+        case "add":
+            return BookmarkerEvent.CategoryAddDeletedOnPage;
+    }
+};
+
+CategoryList.getAddEvent = function (type) {
+    switch (type) {
+        case "search":
+            return BookmarkerEvent.CategorySearchAddedOnPage;
+        case "add":
+            return BookmarkerEvent.CategoryAddAddedOnPage;
     }
 };

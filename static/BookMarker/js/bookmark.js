@@ -1,26 +1,24 @@
-function BookmarkList(eventBus, scope, sel, categoryList) {
-    Common.call(this, eventBus, scope, sel);
+function BookmarkList(eventBus, sel, categoryList) {
+    Common.call(this, eventBus, sel);
     this.categoryList = categoryList;
 }
 
 BookmarkList.prototype = {
     constructor: BookmarkList,
 
-    notify: function (eventName, scope) {
+    notify: function (eventName) {
         switch (eventName) {
-            case BookmarkerEvent.CategoryAddedOnPage:
-            case BookmarkerEvent.CategoryDeletedOnPage:
-                this.isCurrentList(scope) && this.updateBookmarks();
+            case BookmarkerEvent.CategorySearchAddedOnPage:
+            case BookmarkerEvent.CategorySearchDeletedOnPage:
+                this.updateBookmarks();
                 break;
+            default:
+                console.log(eventName + " not bound");
         }
     },
 
     clear: function () {
         this.sel.html("");
-    },
-
-    isCurrentList: function (scope) {
-        return this.categoryList.scope == scope;
     },
 
     updateBookmarks: function () {

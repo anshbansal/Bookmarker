@@ -1,7 +1,6 @@
 ;
-function Common(eventBus, scope, sel) {
+function Common(eventBus, sel) {
     this.eventBus = eventBus;
-    this.scope = scope;
     this.sel = sel;
 }
 
@@ -12,7 +11,6 @@ function objValueInClass(value, curObj, classString, classIsChild) {
     iter.each(function () {
         if (value == $.trim($(this).text())) {
             result = true;
-            return;
         }
     });
     return result;

@@ -6,30 +6,34 @@ var bookmarkList;
 
 function BookmarkerEvent() {
 }
-BookmarkerEvent.ToggleTopBar = "topBar:toggle";
-BookmarkerEvent.CategoryAddedOnPage = "category:added";
-BookmarkerEvent.CategoryDeletedOnPage = "category:deleted";
 
 $(function () {
     eventBus = new BookmarkerEventBus();
-    topSection = new TopSection(eventBus, 'topBar', $("#top-wrapper"));
+    topSection = new TopSection(eventBus, $("#top-wrapper"));
 
-    var categoryListSearch = new CategoryList(eventBus, 'sideBar', $("#category_list_search"));
-    categoryInpSearch = new CategoryInput(eventBus, 'sideBar', $("#category_inp"), categoryListSearch);
-    var categoryListAdd = new CategoryList(eventBus, 'topBar', $("#category_list_add"));
-    categoryInpAdd = new CategoryInput(eventBus, 'topBar', $("#category-box"), categoryListAdd);
+    var categoryListSearch = new CategoryList(eventBus, $("#category_list_search"), 'search');
+    categoryInpSearch = new CategoryInput(eventBus, $("#category_inp"), categoryListSearch);
+    var categoryListAdd = new CategoryList(eventBus, $("#category_list_add"), 'add');
+    categoryInpAdd = new CategoryInput(eventBus, $("#category-box"), categoryListAdd);
 
-    bookmarkList = new BookmarkList(eventBus, 'mainBody', $("#bookmarks-list"), categoryListSearch);
+    bookmarkList = new BookmarkList(eventBus, $("#bookmarks-list"), categoryListSearch);
+
+    function initSubscriptionObj(subObj, eventString, subscribers) {
+        subObj[eventString] = subscribers;
+        return eventString;
+    }
 
     var subObj = {};
-    subObj[BookmarkerEvent.ToggleTopBar] = [topSection];
-    subObj[BookmarkerEvent.CategoryAddedOnPage] = [bookmarkList];
-    subObj[BookmarkerEvent.CategoryDeletedOnPage] = [bookmarkList];
+    BookmarkerEvent.ToggleTopBar = initSubscriptionObj(subObj, "topBar:toggle", [topSection]);
+    BookmarkerEvent.CategorySearchAddedOnPage = initSubscriptionObj(subObj, "category:search:added", [bookmarkList]);
+    BookmarkerEvent.CategorySearchDeletedOnPage = initSubscriptionObj(subObj, "category:search:deleted", [bookmarkList]);
+    BookmarkerEvent.CategoryAddAddedOnPage = initSubscriptionObj(subObj, "category:add:added", []);
+    BookmarkerEvent.CategoryAddDeletedOnPage = initSubscriptionObj(subObj, "category:add:deleted", []);
     eventBus.subscribe(subObj);
 
-    eventBus.publish(BookmarkerEvent.ToggleTopBar, '');
+    eventBus.publish(BookmarkerEvent.ToggleTopBar);
 });
 
 $("#add-bookmark").click(function () {
-    eventBus.publish(BookmarkerEvent.ToggleTopBar, '');
+    eventBus.publish(BookmarkerEvent.ToggleTopBar);
 });
