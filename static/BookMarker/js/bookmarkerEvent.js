@@ -1,3 +1,6 @@
+function BookmarkerEvent() {
+}
+
 function BookmarkerEventBus() {
     this.subscribers = {};
 }
@@ -23,13 +26,43 @@ BookmarkerEventBus.prototype = {
         sel[eventName].push(elem);
     },
 
-    publish: function (eventName) {
+    publish: function (eventName, args) {
         var subscribers = this.subscribers[eventName];
         if (!subscribers) {
             return;
         }
         for (var i = 0; i < subscribers.length; i++) {
-            subscribers[i].notify(eventName);
+            subscribers[i].notify(eventName, args);
         }
+    }
+};
+
+
+NotificationBar = function (eventBus, sel) {
+    Common.call(this, eventBus, sel);
+};
+
+NotificationBar.prototype = {
+    notify: function (eventName, args) {
+        switch (eventName) {
+            case BookmarkerEvent.Notify:
+                this.showNotification(args.notifyMessage);
+                break;
+            default:
+                console.log(eventName + " not bound");
+        }
+    },
+
+    hide: function () {
+        this.sel.hide();
+    },
+
+    showNotification: function (message) {
+        var sel = this.sel;
+        sel.fadeIn(50, function () {
+            setTimeout(function () {
+                sel.fadeOut(800);
+            }, 3000);
+        });
     }
 };

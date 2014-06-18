@@ -6,7 +6,7 @@ function BookmarkList(eventBus, sel, categoryList) {
 BookmarkList.prototype = {
     constructor: BookmarkList,
 
-    notify: function (eventName) {
+    notify: function (eventName, args) {
         switch (eventName) {
             case BookmarkerEvent.CategorySearchAddedOnPage:
             case BookmarkerEvent.CategorySearchDeletedOnPage:

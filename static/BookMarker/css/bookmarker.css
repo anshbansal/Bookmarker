@@ -57,3 +57,12 @@ body {
 input {
     text-align: center;
 }
+
+#notification-bar {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: lightblue;
+    width: 200px;
+    height: 100px;
+}

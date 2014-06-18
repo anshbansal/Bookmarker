@@ -88,6 +88,7 @@ def get_bookmarks(request):
     })
 
 
+#TODO Need to check the name
 def get_bookmark_by_name(request):
     bookmark = GetBookMarks.get_bookmark_by_name(request.GET.get("name", ""))
     print("Aseem")

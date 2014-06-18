@@ -1,11 +1,14 @@
-function CategoryInput(eventBus, sel, categoryList) {
+function CategoryInput(eventBus, sel, categoryList, newCategoryAllowed) {
     Common.call(this, eventBus, sel);
     this.categoryList = categoryList;
+    this.newCategoryAllowed = newCategoryAllowed;
 
     var _this = this;
     this.sel.on("keyup", function (e) {
         if (e.keyCode == 13) {
-            _this.enterKey(e);
+            _this.addCategoryToPage();
+        } else if (e.altKey && e.keyCode == "N".charCodeAt(0)) {
+            _this.addNewCategory();
         }
     });
 
@@ -14,24 +17,42 @@ function CategoryInput(eventBus, sel, categoryList) {
             CategoryRepo.AutoByLike(_this.categoryList.getAllCategories(), _this.getVal(), res);
         }
     });
+    this._isAutocompleteOn = true;
 }
 
 CategoryInput.prototype = {
     constructor: CategoryInput,
 
-    enterKey: function (e) {
+    addCategoryToPage: function () {
         var _this = this;
-        if (!this.categoryList.testCategory(this)) {
-            return;
+        if (this.categoryList.testCategory(this)) {
+            CategoryRepo.DetailByName(this.getVal()).success(function (output) {
+                _this.categoryList.addCategory(output);
+                _this.clear();
+            });
         }
-        CategoryRepo.DetailByName(this.getVal()).success(function (output) {
-            _this.categoryList.addCategory(output);
-            _this.clear();
-        });
+    },
+
+    addNewCategory: function () {
+        this.toggleAutocomplete();
+        if (this.newCategoryAllowed) {
+            //TODO Pass notification to
+            this.eventBus.publish(BookmarkerEvent.Notify, {notifyMessage: "Aseem"});
+        }
+        this.clear();
+        this.toggleAutocomplete();
     },
 
     getVal: function () {
         return this.sel.val();
+    },
+
+    toggleAutocomplete: function () {
+        if (this._isAutocompleteOn) {
+            this.sel.autocomplete("disable");
+        } else {
+            this.sel.autocomplete("enable");
+        }
     },
 
     clear: function () {
@@ -55,9 +76,9 @@ CategoryList.prototype = {
         $(this.deleteString).click(function () {
             //TODO Refactor logic for deletion of category
             $(this).closest(".category").remove();
-            _this.eventBus.publish(CategoryList.getDeleteEvent(_this.type));
+            _this.eventBus.publish(CategoryList.getDeleteEvent(_this.type), {});
         });
-        this.eventBus.publish(CategoryList.getAddEvent(this.type));
+        this.eventBus.publish(CategoryList.getAddEvent(this.type), {});
     },
 
     clear: function () {
