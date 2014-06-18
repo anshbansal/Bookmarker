@@ -7,8 +7,10 @@ function CategoryInput(eventBus, sel, categoryList, newCategoryAllowed) {
     this.sel.on("keyup", function (e) {
         if (e.keyCode == 13) {
             _this.addCategoryToPage();
-        } else if (e.altKey && e.keyCode == "N".charCodeAt(0)) {
-            _this.addNewCategory();
+        } else if (e.altKey) {
+            if (e.keyCode == "N".charCodeAt(0)) {
+                _this.addNewCategory();
+            }
         }
     });
 
@@ -36,7 +38,7 @@ CategoryInput.prototype = {
     addNewCategory: function () {
         this.toggleAutocomplete();
         if (this.newCategoryAllowed) {
-            //TODO Pass notification to
+            //TODO Pass category for addition of new category
             this.eventBus.publish(BookmarkerEvent.Notify, {notifyMessage: "Aseem"});
         }
         this.clear();
