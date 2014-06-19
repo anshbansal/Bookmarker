@@ -9,8 +9,15 @@ The bookmarks will be stored by category. A webpage with search for the bookmark
 ####But some solutions are alrady present for this problem
 Yeah I know. Some online solutions are present for solving this. Before working this project I had not worked on a Python framework. So this project was also a learning exercise for me. Plus the community gets a Django app for this.
 
-####Current status - Alpha
-This is still very much in progress. Currently working on search page.
+####Current Progress
+- Searching bookmarks by category works. 
+- Auto-complete is present for categories to make search easier
+- Being able to open bookmarks through the UI
+- Working on being able to add/remove categories from the page
+
+####Future Ideas
+- Addition/Modification of bookmarks. I know this should have been done earlier :D. But I decided on search before addition
+- Chrome Plugin for migrating bookmarks to the app and vice versa
 
 ####Help wanted
 Anyone interested in helping to improve UI please start a issue.
