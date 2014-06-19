@@ -37,7 +37,7 @@ function BookmarkRepo() {
 }
 
 BookmarkRepo.ListByCategory = function (categoryIds) {
-    return _BaseRepo.GeneralAjaxCall("bookmark/category/", {ids: categoryIds});
+    return _BaseRepo.AjaxCall("bookmark/category/", categoryIds);
 };
 
 BookmarkRepo.OpenPage = function (sel) {

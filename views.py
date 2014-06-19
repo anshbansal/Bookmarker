@@ -81,7 +81,7 @@ def website_open(request):
 
 
 def get_bookmarks(request):
-    categories = _get_objects_by_params(request, 'ids', Category)
+    categories = _get_objects_by_params(request, 'value', Category)
     bookmarks = GetBookMarks.get_bookmarks_by_categories(categories)
     return render(request, 'BookMarker/partials/bookmarks.html', {
         'bookmarks': bookmarks,
@@ -91,8 +91,6 @@ def get_bookmarks(request):
 #TODO Need to check the name
 def get_bookmark_by_name(request):
     bookmark = GetBookMarks.get_bookmark_by_name(request.GET.get("name", ""))
-    print("Aseem")
-    print(bookmark)
     categories = GetCategories.get_categories_by_bookmark(bookmark)
     result = [category.name for category in categories]
     return HttpResponse(json.dumps(result), 'application/json')
