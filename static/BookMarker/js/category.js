@@ -36,10 +36,12 @@ CategoryInput.prototype = {
     },
 
     addNewCategory: function () {
+        var _this = this;
         this.toggleAutocomplete();
         if (this.newCategoryAllowed) {
-            //TODO Pass category for addition of new category
-            this.eventBus.publish(BookmarkerEvent.Notify, {notifyMessage: "Aseem"});
+            CategoryRepo.AddCategory(this.getVal()).success(function (output) {
+                _this.eventBus.publish(BookmarkerEvent.Notify, {notifyMessage: output});
+            });
         }
         this.clear();
         this.toggleAutocomplete();

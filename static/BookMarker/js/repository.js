@@ -1,3 +1,18 @@
+function _BaseRepo() {
+}
+
+_BaseRepo.GeneralAjaxCall = function (urlName, dataDic) {
+    return $.ajax({
+        url: urlName,
+        data: dataDic
+    });
+};
+
+_BaseRepo.AjaxCall = function (urlName, valueData) {
+    return _BaseRepo.GeneralAjaxCall(urlName, {value: valueData});
+};
+
+
 function CategoryRepo() {
 }
 
@@ -10,10 +25,11 @@ CategoryRepo.AutoByLike = function (exclude, term, res) {
 };
 
 CategoryRepo.DetailByName = function (categoryName) {
-    return $.ajax({
-        url: "category/",
-        data: {'value': categoryName}
-    })
+    return _BaseRepo.AjaxCall("category/", categoryName);
+};
+
+CategoryRepo.AddCategory = function (categoryName) {
+    return _BaseRepo.AjaxCall("service/category/add", categoryName);
 };
 
 
@@ -21,15 +37,9 @@ function BookmarkRepo() {
 }
 
 BookmarkRepo.ListByCategory = function (categoryIds) {
-    return $.ajax({
-        url: "bookmark/category/",
-        data: {'ids': categoryIds}
-    });
+    return _BaseRepo.GeneralAjaxCall("bookmark/category/", {ids: categoryIds});
 };
 
 BookmarkRepo.OpenPage = function (sel) {
-    return $.ajax({
-        url: "open/",
-        data: {'id': getClassNames(sel, "col-md-12 bookmark ".length)}
-    });
+    return _BaseRepo.GeneralAjaxCall("open/", {id: getClassNames(sel, "col-md-12 bookmark ".length)});
 };

@@ -57,7 +57,12 @@ NotificationBar.prototype = {
         this.sel.hide();
     },
 
+    setMessage: function (message) {
+        this.sel.html(message);
+    },
+
     showNotification: function (message) {
+        this.setMessage(message);
         var sel = this.sel;
         sel.fadeIn(50, function () {
             setTimeout(function () {

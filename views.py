@@ -105,6 +105,10 @@ def get_category(request):
     })
 
 
+def add_category(request):
+    #TODO Make changes
+    return HttpResponse('success', 'text/html')
+
 ########################
 ##        Views       ##
 ########################
