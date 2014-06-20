@@ -1,3 +1,5 @@
+from django.db import transaction
+from django.db.utils import DatabaseError
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -62,6 +64,10 @@ class GetCategories:
     def get_categories_by_bookmark(bookmark):
         return bookmark.category.all()
 
+    @staticmethod
+    def get_category_by_name(category_name):
+        return Category.objects.filter(name=category_name)
+
 
 ###########################
 ##         Services      ##
@@ -103,9 +109,33 @@ def get_category(request):
     })
 
 
+@transaction.atomic
 def add_category(request):
-    #TODO Make changes
-    return HttpResponse('success', 'text/html')
+    name = request.GET.get("value", "")
+    if name.isspace() or not name:
+        message = 'Category cannot be empty'
+    else:
+        if len(GetCategories.get_category_by_name(name)) == 0:
+            try:
+                with transaction.atomic():
+                    cat = Category(name=name)
+                    cat.save()
+                message = 'Category ' + name + ' added to App'
+            except DatabaseError:
+                message = 'Problem in saving category'
+        else:
+            message = 'Category ' + name + ' already present'
+    return HttpResponse(message, 'text/html')
+
+
+#TODO Make changes here
+def delete_category(request):
+    category = _get_objects_by_params(request, 'value', Category)
+    bookmarks = GetBookMarks.get_bookmarks_by_categories(category[0].id)
+    for bookmark in bookmarks:
+        print(bookmark.name)
+    return HttpResponse('Testing', 'text/html')
+
 
 ########################
 ##        Views       ##

@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^open/', views.website_open, name='website_open'),
 
     url(r'^service/category/add', views.add_category, name='add_category'),
+    url(r'^service/category/delete', views.delete_category, name='delete_category'),
 
     url(r'^bookmark/category/', views.get_bookmarks, name='get_bookmarks'),
     url(r'^bookmark/name/', views.get_bookmark_by_name, name='get_bookmark_by_name'),

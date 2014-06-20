@@ -1,7 +1,7 @@
-function CategoryInput(eventBus, sel, categoryList, newCategoryAllowed) {
+function CategoryInput(eventBus, sel, categoryList, categoryModAllow) {
     Common.call(this, eventBus, sel);
     this.categoryList = categoryList;
-    this.newCategoryAllowed = newCategoryAllowed;
+    this.categoryModAllow = categoryModAllow;
 
     var _this = this;
     this.sel.on("keyup", function (e) {
@@ -10,6 +10,8 @@ function CategoryInput(eventBus, sel, categoryList, newCategoryAllowed) {
         } else if (e.altKey) {
             if (e.keyCode == "N".charCodeAt(0)) {
                 _this.addNewCategory();
+            } else if (e.keyCode == "R".charCodeAt(0)) {
+                _this.deleteCategory();
             }
         }
     });
@@ -35,16 +37,24 @@ CategoryInput.prototype = {
         }
     },
 
-    addNewCategory: function () {
+    _modifyCategory: function(funcName) {
         var _this = this;
         this.toggleAutocomplete();
-        if (this.newCategoryAllowed) {
-            CategoryRepo.AddCategory(this.getVal()).success(function (output) {
+        if (this.categoryModAllow) {
+            funcName(this.getVal()).success(function (output) {
                 _this.eventBus.publish(BookmarkerEvent.Notify, {notifyMessage: output});
             });
         }
         this.clear();
         this.toggleAutocomplete();
+    },
+
+    addNewCategory: function () {
+        this._modifyCategory(CategoryRepo.AddCategory);
+    },
+
+    deleteCategory: function () {
+        this._modifyCategory(CategoryRepo.DeleteCategory);
     },
 
     getVal: function () {

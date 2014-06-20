@@ -32,6 +32,9 @@ CategoryRepo.AddCategory = function (categoryName) {
     return _BaseRepo.AjaxCall("service/category/add", categoryName);
 };
 
+CategoryRepo.DeleteCategory = function (categoryName) {
+    return _BaseRepo.AjaxCall("service/category/delete", categoryName);
+};
 
 function BookmarkRepo() {
 }
