@@ -61,6 +61,7 @@ NotificationBar.prototype = {
         this.sel.html(message);
     },
 
+    //TODO Multiple notifications in small interval handling
     showNotification: function (message) {
         this.setMessage(message);
         var sel = this.sel;

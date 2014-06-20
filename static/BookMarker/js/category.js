@@ -7,7 +7,7 @@ function CategoryInput(eventBus, sel, categoryList, categoryModAllow) {
     this.sel.on("keyup", function (e) {
         if (e.keyCode == 13) {
             _this.addCategoryToPage();
-        } else if (e.altKey) {
+        } else if (_this.categoryModAllow && e.altKey) {
             if (e.keyCode == "N".charCodeAt(0)) {
                 _this.addNewCategory();
             } else if (e.keyCode == "R".charCodeAt(0)) {
@@ -37,14 +37,12 @@ CategoryInput.prototype = {
         }
     },
 
-    _modifyCategory: function(funcName) {
+    _modifyCategory: function (funcName) {
         var _this = this;
         this.toggleAutocomplete();
-        if (this.categoryModAllow) {
-            funcName(this.getVal()).success(function (output) {
-                _this.eventBus.publish(BookmarkerEvent.Notify, {notifyMessage: output});
-            });
-        }
+        funcName(this.getVal()).success(function (output) {
+            _this.eventBus.publish(BookmarkerEvent.Notify, {notifyMessage: output});
+        });
         this.clear();
         this.toggleAutocomplete();
     },
