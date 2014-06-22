@@ -11,9 +11,19 @@ $(function () {
     notificationBar = new NotificationBar(eventBus, $('#notification-bar'));
     notificationBar.hide();
 
-    var categoryListSearch = new CategoryList(eventBus, $("#category_list_search"), 'search');
+    var searchCategoryEvents = {
+        add_: "category:search:added",
+        delete_: "category:search:deleted"
+    };
+
+    var addCategoryEvents = {
+        add_: "category:add:added",
+        delete_: "category:add:deleted"
+    };
+
+    var categoryListSearch = new CategoryList(eventBus, $("#category_list_search"), searchCategoryEvents);
     categoryInpSearch = new CategoryInput(eventBus, $("#category_inp"), categoryListSearch, false);
-    var categoryListAdd = new CategoryList(eventBus, $("#category_list_add"), 'add');
+    var categoryListAdd = new CategoryList(eventBus, $("#category_list_add"), addCategoryEvents);
     categoryInpAdd = new CategoryInput(eventBus, $("#category-box"), categoryListAdd, true);
 
     bookmarkList = new BookmarkList(eventBus, $("#bookmarks-list"), categoryListSearch);

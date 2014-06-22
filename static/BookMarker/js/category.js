@@ -31,7 +31,7 @@ CategoryInput.prototype = {
         var _this = this;
         if (this.categoryList.testCategory(this)) {
             CategoryRepo.DetailByName(this.getVal()).success(function (output) {
-                _this.categoryList.addCategory(output);
+                _this.categoryList.appendCategory(output);
                 _this.clear();
             });
         }
@@ -73,24 +73,24 @@ CategoryInput.prototype = {
 };
 
 
-function CategoryList(eventBus, sel, type) {
+function CategoryList(eventBus, sel, eventDict) {
     Common.call(this, eventBus, sel);
     this.deleteString = ".delete-cat";
-    this.type = type;
+    this.eventDict = eventDict;
 }
 
 CategoryList.prototype = {
     constructor: CategoryList,
 
-    addCategory: function (category) {
+    appendCategory: function (category) {
         var _this = this;
         this.sel.append(category);
         $(this.deleteString).click(function () {
             //TODO Refactor logic for deletion of category
             $(this).closest(".category").remove();
-            _this.eventBus.publish(CategoryList.getDeleteEvent(_this.type), {});
+            _this.eventBus.publish(_this.eventDict.delete_, {});
         });
-        this.eventBus.publish(CategoryList.getAddEvent(this.type), {});
+        this.eventBus.publish(_this.eventDict.add_, {});
     },
 
     clear: function () {
@@ -112,23 +112,5 @@ CategoryList.prototype = {
             return true;
         }
         return false;
-    }
-};
-
-CategoryList.getDeleteEvent = function (type) {
-    switch (type) {
-        case "search":
-            return BookmarkerEvent.CategorySearchDeletedOnPage;
-        case "add":
-            return BookmarkerEvent.CategoryAddDeletedOnPage;
-    }
-};
-
-CategoryList.getAddEvent = function (type) {
-    switch (type) {
-        case "search":
-            return BookmarkerEvent.CategorySearchAddedOnPage;
-        case "add":
-            return BookmarkerEvent.CategoryAddAddedOnPage;
     }
 };
